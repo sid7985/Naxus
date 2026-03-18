@@ -1,0 +1,92 @@
+/* ============================================
+   NEXUS Theme System
+   4 themes: Dark (default), OLED, Light, High Contrast
+   ============================================ */
+
+/* === Theme: Dark (Default) === */
+[data-theme="dark"], :root {
+  --bg-void: #0A0A0F;
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --bg-glass-hover: rgba(255, 255, 255, 0.07);
+  --bg-glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(20px);
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0B0;
+  --text-muted: #606070;
+
+  --agent-manager: #7C3AED;
+  --agent-coder: #06B6D4;
+  --agent-designer: #F59E0B;
+  --agent-marketer: #10B981;
+  --agent-tester: #F43F5E;
+  --agent-researcher: #6366F1;
+
+  --status-idle: #606070;
+  --status-thinking: #F59E0B;
+  --status-acting: #06B6D4;
+  --status-done: #10B981;
+  --status-error: #F43F5E;
+}
+
+/* === Theme: OLED Black === */
+[data-theme="oled"] {
+  --bg-void: #000000;
+  --bg-glass: rgba(255, 255, 255, 0.02);
+  --bg-glass-hover: rgba(255, 255, 255, 0.05);
+  --bg-glass-border: rgba(255, 255, 255, 0.06);
+
+  --text-primary: #EAEAEF;
+  --text-secondary: #909098;
+  --text-muted: #505058;
+}
+
+/* === Theme: Soft Light === */
+[data-theme="light"] {
+  --bg-void: #F4F4F8;
+  --bg-glass: rgba(0, 0, 0, 0.03);
+  --bg-glass-hover: rgba(0, 0, 0, 0.06);
+  --bg-glass-border: rgba(0, 0, 0, 0.08);
+
+  --text-primary: #1A1A2E;
+  --text-secondary: #555570;
+  --text-muted: #9090A0;
+
+  --agent-manager: #6D28D9;
+  --agent-coder: #0891B2;
+  --agent-designer: #D97706;
+  --agent-marketer: #059669;
+  --agent-tester: #E11D48;
+  --agent-researcher: #4F46E5;
+
+  --status-idle: #9090A0;
+  --status-thinking: #D97706;
+  --status-acting: #0891B2;
+  --status-done: #059669;
+  --status-error: #E11D48;
+}
+
+/* === Theme: High Contrast === */
+[data-theme="highcontrast"] {
+  --bg-void: #000000;
+  --bg-glass: rgba(255, 255, 255, 0.08);
+  --bg-glass-hover: rgba(255, 255, 255, 0.12);
+  --bg-glass-border: rgba(255, 255, 255, 0.25);
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #D0D0DD;
+  --text-muted: #A0A0B0;
+
+  --agent-manager: #A855F7;
+  --agent-coder: #22D3EE;
+  --agent-designer: #FCD34D;
+  --agent-marketer: #34D399;
+  --agent-tester: #FB7185;
+  --agent-researcher: #818CF8;
+
+  --status-idle: #A0A0B0;
+  --status-thinking: #FCD34D;
+  --status-acting: #22D3EE;
+  --status-done: #34D399;
+  --status-error: #FB7185;
+}

@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+venv/
+.env
+.env.*
+
+# Build outputs
+dist/
+dist-tauri/
+build/
+bin/
+*.exe
+*.dmg
+*.app
+src-tauri/target/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python specific
+__pycache__/
+*.py[cod]
+*$py.class
+auth/
+*.spec
+
+# Application Data
+whisk_images/
+stitch_nexus_launcher_void 2/
+.gemini/
+brain/
