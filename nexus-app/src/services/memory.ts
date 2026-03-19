@@ -114,6 +114,23 @@ export class MemoryService {
   }
 
   /**
+   * Indexes a single document for real-time RAG updates
+   */
+  async indexDocument(filePath: string) {
+    try {
+      const resp = await fetch('http://localhost:1421/rag/index_document', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file_path: filePath })
+      });
+      return await resp.json();
+    } catch (error) {
+      console.error(`Failed to index document ${filePath}:`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Queries the indexed RAG knowledge base
    */
   async queryKnowledgeBase(query: string, limit: number = 5) {

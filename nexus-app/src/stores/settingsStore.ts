@@ -8,6 +8,7 @@ interface SettingsState {
   theme: 'dark' | 'oled' | 'light' | 'high-contrast';
   internetMode: InternetMode;
   ollamaConnected: boolean;
+  liquidGlassEnabled: boolean;
   allowedDomains: string[];
   providerApiKeys: Partial<Record<LLMProviderId, string>>;
   providerBaseUrls: Partial<Record<LLMProviderId, string>>;
@@ -15,6 +16,7 @@ interface SettingsState {
   // Actions
   setWorkspace: (config: Partial<WorkspaceConfig>) => void;
   setTheme: (theme: SettingsState['theme']) => void;
+  setLiquidGlassEnabled: (enabled: boolean) => void;
   setInternetMode: (mode: InternetMode) => void;
   setOllamaConnected: (connected: boolean) => void;
   setSetupComplete: (complete: boolean) => void;
@@ -43,6 +45,7 @@ export const useSettingsStore = create<SettingsState>()(
         isSetupComplete: false,
       },
       theme: 'dark',
+      liquidGlassEnabled: false,
       internetMode: 'offline',
       ollamaConnected: false,
       allowedDomains: [],
@@ -55,6 +58,7 @@ export const useSettingsStore = create<SettingsState>()(
         })),
 
       setTheme: (theme) => set({ theme }),
+      setLiquidGlassEnabled: (enabled) => set({ liquidGlassEnabled: enabled }),
       setInternetMode: (mode) => set({ internetMode: mode }),
       setOllamaConnected: (connected) => set({ ollamaConnected: connected }),
 

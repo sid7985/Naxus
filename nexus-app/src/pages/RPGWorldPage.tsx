@@ -15,7 +15,7 @@ export default function RPGWorldPage() {
   
   // Check if any agent is currently active/processing
   const agents = useAgentStore(s => s.agents);
-  const isExecuting = Object.values(agents).some(a => a.status === 'active' || a.status === 'thinking');
+  const isExecuting = Object.values(agents).some(a => a.status === 'acting' || a.status === 'thinking');
 
   // Keyboard shortcut (⌘G) to toggle back to dashboard
   useEffect(() => {

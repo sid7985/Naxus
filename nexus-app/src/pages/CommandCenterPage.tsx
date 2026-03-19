@@ -42,6 +42,7 @@ export default function CommandCenterPage() {
   const updateAgentStatus = useAgentStore((s) => s.updateAgentStatus);
   const workspace = useSettingsStore((s) => s.workspace);
   const internetMode = useSettingsStore((s) => s.internetMode);
+  const liquidGlassEnabled = useSettingsStore((s) => s.liquidGlassEnabled);
 
   useEffect(() => {
     feedEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -167,7 +168,7 @@ export default function CommandCenterPage() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* --- Left Sidebar: Agent Team --- */}
-        <div className="w-60 border-r border-glass-border flex flex-col p-3 gap-2 overflow-y-auto shrink-0">
+        <div className={`w-60 border-r border-glass-border flex flex-col p-3 gap-2 overflow-y-auto shrink-0 transition-colors duration-500 ${liquidGlassEnabled ? 'bg-black/30 backdrop-blur-3xl border-r-white/10' : 'bg-void'}`}>
           <div className="text-[10px] uppercase tracking-widest text-text-muted font-mono mb-1 px-1">
             Active Agents
           </div>
@@ -231,6 +232,20 @@ export default function CommandCenterPage() {
                Memory Systems
              </button>
              <button
+               onClick={() => navigate('/memory-graph')}
+               className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-agent-tester hover:bg-glass transition-colors border border-agent-tester/20 bg-agent-tester/5"
+             >
+               <Activity className="w-3.5 h-3.5" />
+               Interactive Graph
+             </button>
+             <button
+               onClick={() => navigate('/todo')}
+               className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-cyan-400 hover:bg-glass transition-colors border border-cyan-400/20 bg-cyan-400/5 mt-2"
+             >
+               <Sparkles className="w-3.5 h-3.5" />
+               E2E App Test
+             </button>
+             <button
                onClick={() => navigate('/integrations')}
                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-agent-marketer hover:bg-glass transition-colors"
              >
@@ -248,7 +263,7 @@ export default function CommandCenterPage() {
          </div>
 
         {/* --- Center: Mission Feed --- */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className={`flex-1 flex flex-col min-w-0 transition-colors duration-500 ${liquidGlassEnabled ? 'bg-void' : ''}`}>
           {/* Session header */}
           <div className="px-4 py-2 border-b border-glass-border flex items-center justify-between">
             <span className="text-xs font-mono text-agent-manager">
@@ -366,7 +381,7 @@ export default function CommandCenterPage() {
         </div>
 
         {/* --- Right Rail: Context Panel --- */}
-        <div className="w-72 border-l border-glass-border flex flex-col shrink-0">
+        <div className={`w-72 border-l border-glass-border flex flex-col shrink-0 transition-colors duration-500 ${liquidGlassEnabled ? 'bg-black/30 backdrop-blur-3xl border-l-white/10' : 'bg-void'}`}>
           {/* Tabs */}
           <div className="flex border-b border-glass-border">
             {(['files', 'memory', 'web', 'metrics'] as const).map((tab) => {

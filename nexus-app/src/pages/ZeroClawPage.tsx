@@ -11,6 +11,11 @@ export default function ZeroClawPage() {
   const [isCapturing, setIsCapturing] = useState(false);
   const [actionLog, setActionLog] = useState<string[]>([]);
   
+  // Safe Zone State
+  const [safeZone, setSafeZone] = useState<{x: number, y: number, w: number, h: number} | null>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [startPoint, setStartPoint] = useState({x: 0, y: 0});
+  
   // Test Action State
   const [actionType, setActionType] = useState('click');
   const [actionX, setActionX] = useState('');
@@ -61,6 +66,38 @@ export default function ZeroClawPage() {
       logAction(`Success: ${actionType} executed`);
     } else {
       logAction(`Blocked/Error: ${res.error}`);
+    }
+  };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLImageElement>) => {
+    setIsDrawing(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setStartPoint({x, y});
+    setSafeZone({x, y, w: 0, h: 0});
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLImageElement>) => {
+    if (!isDrawing) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+    
+    setSafeZone({
+      x: Math.min(startPoint.x, currentX),
+      y: Math.min(startPoint.y, currentY),
+      w: Math.abs(currentX - startPoint.x),
+      h: Math.abs(currentY - startPoint.y)
+    });
+  };
+
+  const handlePointerUp = () => {
+    setIsDrawing(false);
+    if (safeZone && safeZone.w > 20 && safeZone.h > 20) {
+      logAction(`Safe zone defined: [x:${Math.round(safeZone.x)}, y:${Math.round(safeZone.y)}, w:${Math.round(safeZone.w)}, h:${Math.round(safeZone.h)}]`);
+    } else {
+      setSafeZone(null); // Too small
     }
   };
 
@@ -183,9 +220,40 @@ export default function ZeroClawPage() {
               </button>
             </div>
             
-            <div className="flex-1 bg-void rounded-lg border border-glass-border flex items-center justify-center overflow-hidden relative">
+            <div className="flex-1 bg-void rounded-lg border border-glass-border flex items-center justify-center overflow-hidden relative cursor-crosshair">
               {screenshot ? (
-                <img src={screenshot} alt="Captured screen" className="max-w-full max-h-full object-contain" />
+                <div className="relative inline-block">
+                  <img 
+                    src={screenshot} 
+                    alt="Captured screen" 
+                    className="max-w-full max-h-full object-contain pointer-events-auto select-none"
+                    draggable={false}
+                    onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    onPointerLeave={handlePointerUp}
+                  />
+                  {safeZone && (
+                     <div 
+                        className="absolute border-2 border-green-400 bg-green-400/10 pointer-events-none"
+                        style={{
+                          left: safeZone.x,
+                          top: safeZone.y,
+                          width: safeZone.w,
+                          height: safeZone.h,
+                        }}
+                     >
+                       <span className="absolute -top-6 left-0 bg-green-400 text-black text-[10px] px-1 font-bold whitespace-nowrap">
+                         SAFE ZONE
+                       </span>
+                     </div>
+                  )}
+                  {/* Annotation Overlay (Phase 11/12) - Simulated agent attention Box */}
+                  <div className="absolute border border-red-500 bg-red-500/10 pointer-events-none opacity-50 animate-pulse"
+                       style={{ left: '25%', top: '30%', width: '15%', height: '10%' }}>
+                       <span className="absolute -top-4 left-0 text-red-500 text-[9px] font-bold">AGENT TARGET</span>
+                  </div>
+                </div>
               ) : (
                 <div className="text-center text-text-muted flex flex-col items-center">
                   <Eye className="w-8 h-8 mb-3 opacity-30" />

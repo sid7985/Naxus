@@ -35,6 +35,20 @@ export const CODER_TOOLS = [
   {
     type: 'function',
     function: {
+      name: 'delete_file',
+      description: 'Delete a file at the given literal path. DESTRUCTIVE ACTION.',
+      parameters: {
+        type: 'object',
+        properties: {
+          path: { type: 'string', description: 'The path of the file to delete' }
+        },
+        required: ['path']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
       name: 'list_directory',
       description: 'List the contents of a directory.',
       parameters: {

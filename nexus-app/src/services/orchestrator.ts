@@ -209,6 +209,60 @@ export class AgentOrchestrator {
               const args = call.function.arguments;
               let resultText = `⚙️ Executing: ${call.function.name}(${JSON.stringify(args)})\n`;
               
+              // NEW: Multi-Agent Debate Mode for Destructive Actions
+              const destructiveTools = ['write_file', 'delete_file', 'execute_command', 'git_commit'];
+              let debateRejected = false;
+
+              if (destructiveTools.includes(call.function.name) && task.assignedTo !== 'tester') {
+                store.addMissionFeedMessage({
+                  role: 'system',
+                  content: `🚨 **DEBATE PROTOCOL ACTIVATED**\nTESTER agent analyzing destructive action: \`${call.function.name}\``,
+                });
+                store.updateAgentStatus('agent-tester', 'thinking');
+                
+                let testerResponse = '';
+                try {
+                  const debatePrompt = `The ${task.assignedTo.toUpperCase()} agent wishes to execute a destructive or state-mutating action:\nTool: ${call.function.name}\nArgs: ${JSON.stringify(args)}\n\nYou are the Security/QA Tester. Analyze this action. If it looks perfectly safe (like running a standard build command or creating a standard file), explicitly say 'APPROVE'. If it looks dangerous, destructive without cause, or malformed, say 'REJECT' and give your reason. Keep it under 2 sentences.`;
+
+                  for await (const tChunk of chatWithProvider(
+                    settings.workspace.modelAssignments.tester || 'ollama:llama3.2',
+                    [{ role: 'user', content: debatePrompt }],
+                    AGENT_SYSTEM_PROMPTS.tester
+                  )) {
+                     if (this.abortController?.signal.aborted) break;
+                     if (typeof tChunk === 'string') testerResponse += tChunk;
+                  }
+                  
+                  store.addMissionFeedMessage({
+                    role: 'assistant',
+                    content: testerResponse,
+                    agentId: 'agent-tester',
+                    agentRole: 'tester',
+                  });
+
+                  if (testerResponse.includes('REJECT') || testerResponse.includes('REJECTED')) {
+                    debateRejected = true;
+                    resultText = `❌ Action blocked by TESTER Agent consensus.\nReason: ${testerResponse}`;
+                    store.incrementAgentMetrics(agentId, { errorCount: 1 });
+                  } else {
+                    resultText = `⚖️ TESTER approved action. Proceeding...\n` + resultText;
+                  }
+                } catch (e) {
+                  resultText += `\n⚠️ Trial skipped (Tester offline). Assuming implicit approval.\n`;
+                }
+                store.updateAgentStatus('agent-tester', 'idle');
+              }
+
+              if (debateRejected) {
+                store.addMissionFeedMessage({
+                  role: 'system',
+                  content: resultText,
+                  agentId: agentId,
+                  agentRole: task.assignedTo,
+                });
+                continue; // Skip the tool execution inside the try/catch
+              }
+
               try {
                 if (call.function.name === 'read_file') {
                   const content = await tauri.readFile(args.path);
@@ -216,6 +270,9 @@ export class AgentOrchestrator {
                 } else if (call.function.name === 'write_file') {
                   await tauri.writeFile(args.path, args.content);
                   resultText += `✅ File written successfully to ${args.path}`;
+                } else if (call.function.name === 'delete_file') {
+                  await tauri.deleteFile(args.path);
+                  resultText += `✅ File deleted successfully: ${args.path}`;
                 } else if (call.function.name === 'execute_command') {
                   const res = await tauri.executeCommand(args.cmd, args.cwd);
                   resultText += res.success ? `✅ Output:\n${res.stdout}` : `❌ Error:\n${res.stderr}`;
