@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "name": "browser-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "@theia/core": "1.52.0",
+    "@theia/editor": "1.52.0",
+    "@theia/monaco": "1.52.0",
+    "@theia/navigator": "1.52.0",
+    "@theia/workspace": "1.52.0",
+    "@theia/preferences": "1.52.0",
+    "@theia/terminal": "1.52.0",
+    "@theia/vsx-registry": "1.52.0",
+    "@theia/messages": "1.52.0",
+    "nexus-agent-extension": "1.0.0"
+  },
+  "devDependencies": {
+    "@theia/cli": "1.52.0",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "prepare": "theia build",
+    "start": "theia start",
+    "watch": "theia build --watch"
+  },
+  "theia": {
+    "target": "browser"
+  }
+}

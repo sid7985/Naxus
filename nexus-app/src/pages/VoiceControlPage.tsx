@@ -11,6 +11,7 @@ import { DEFAULT_AGENTS } from '../lib/constants';
 import { sttService } from '../services/audio/stt';
 import { ttsService } from '../services/audio/tts';
 import { ollama } from '../services/ollama';
+import PageTransition from '../components/layout/PageTransition';
 
 interface TranscriptItem {
   id: string;
@@ -148,6 +149,7 @@ export default function VoiceControlPage() {
   };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
@@ -196,7 +198,7 @@ export default function VoiceControlPage() {
                  className="w-2 rounded-full transition-all duration-75"
                  style={{ 
                    height: `${h}%`,
-                   backgroundColor: isSpeaking ? activeAgent.color : (isListening ? '#3b82f6' : '#333')
+                   backgroundColor: isSpeaking ? activeAgent.color : (isListening ? 'var(--color-agent-researcher)' : 'var(--color-glass-border)')
                  }}
                />
              ))}
@@ -268,7 +270,7 @@ export default function VoiceControlPage() {
         </div>
 
         {/* Right Side: Live Transcription Log */}
-        <div className="w-full md:w-1/2 lg:w-2/5 flex flex-col bg-[#050510]">
+        <div className="w-full md:w-1/2 lg:w-2/5 flex flex-col bg-void">
            <div className="p-4 border-b border-glass-border flex justify-between items-center bg-void/50">
              <h3 className="text-xs font-medium uppercase tracking-widest text-text-muted">Live Transcript</h3>
              <button className="p-1 rounded hover:bg-glass text-text-muted hover:text-white transition-colors">
@@ -299,7 +301,7 @@ export default function VoiceControlPage() {
                    <GlassPanel className={`p-3.5 ${
                      t.role === 'user' 
                        ? 'bg-glass border-glass-border/30 rounded-tr-sm text-sm' 
-                       : 'bg-[#1a1a24] border-[#2a2a35] rounded-tl-sm text-sm'
+                       : 'bg-void-light border-glass-border/30 rounded-tl-sm text-sm'
                      }`}
                    >
                      {t.text}
@@ -324,5 +326,6 @@ export default function VoiceControlPage() {
 
       </div>
     </div>
+    </PageTransition>
   );
 }

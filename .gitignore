@@ -37,7 +37,5 @@ auth/
 *.spec
 
 # Application Data
-whisk_images/
-stitch_nexus_launcher_void 2/
 .gemini/
 brain/

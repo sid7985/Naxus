@@ -7,6 +7,7 @@ import {
   RefreshCw, Check, Key, Eye, EyeOff, Cloud
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import SpatialSidebar from '../components/layout/SpatialSidebar';
 import { useSettingsStore } from '../stores/settingsStore';
 
 import { ollama } from '../services/ollama';
@@ -14,6 +15,7 @@ import { LLM_PROVIDERS } from '../services/llmProvider';
 import { DEFAULT_AGENTS, SHORTCUTS, APP_VERSION } from '../lib/constants';
 import type { OllamaModel, AgentRole } from '../lib/types';
 import { formatBytes } from '../lib/utils';
+import PageTransition from '../components/layout/PageTransition';
 
 const AGENT_ICON_MAP_STR: Record<string, string> = {
   manager: '👑', coder: '💻', designer: '🎨',
@@ -73,9 +75,10 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="h-full flex">
+    <PageTransition>
+    <div className="h-full flex nebula-bg">
       {/* Sidebar */}
-      <div className="w-56 border-r border-glass-border flex flex-col p-4 shrink-0">
+      <SpatialSidebar position="left" width="w-56">
         <button
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-text-muted hover:text-white transition-colors text-sm mb-6"
@@ -109,7 +112,7 @@ export default function SettingsPage() {
         <div className="mt-auto pt-4 border-t border-glass-border">
           <div className="text-[10px] text-text-muted font-mono">NEXUS v{APP_VERSION}</div>
         </div>
-      </div>
+      </SpatialSidebar>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
@@ -415,5 +418,6 @@ export default function SettingsPage() {
         </motion.div>
       </div>
     </div>
+    </PageTransition>
   );
 }

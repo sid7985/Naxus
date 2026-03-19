@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Monitor, Play, Square, 
+  Monitor, Play, Square, 
   Terminal, FileText, Clipboard, Activity
 } from 'lucide-react';
 import { useSkillsStore, NexusSkill } from '../stores/skillsStore';
 import { useMissionQueueStore } from '../stores/missionQueueStore';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageHeader from '../components/layout/PageHeader';
+import NeonIcon from '../components/ui/NeonIcon';
 import { tauri } from '../services/tauri';
 import { formatDistanceToNow } from 'date-fns';
 import { save, open } from '@tauri-apps/plugin-dialog';
 import { writeTextFile, readTextFile } from '@tauri-apps/plugin-fs';
+import PageTransition from '../components/layout/PageTransition';
 
 export default function ComputerModePage() {
-  const navigate = useNavigate();
   const { skills, addSkill } = useSkillsStore();
   const { queue, clearCompleted, removeMission } = useMissionQueueStore();
   const [activeDaemons, setActiveDaemons] = useState<string[]>(['clipboard']);
@@ -68,27 +69,23 @@ export default function ComputerModePage() {
   };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="p-1.5 rounded-lg hover:bg-glass transition-colors">
-            <ArrowLeft className="w-4 h-4 text-text-muted" />
-          </button>
-          <Monitor className="w-5 h-5 text-agent-coder" />
-          <h1 className="text-sm font-semibold">Background Automations</h1>
-        </div>
-      </div>
+      <PageHeader
+        title="Background Automations"
+        subtitle="Watcher daemons & skill triggers"
+        icon={Monitor}
+        iconColor="#06B6D4"
+      />
 
       <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-6">
         {/* Watcher Daemons */}
         <section>
           <h2 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3">Active Watcher Daemons</h2>
           <div className="grid grid-cols-2 gap-4">
-            <GlassPanel className="p-4 flex items-center justify-between border-l-2 border-l-agent-researcher">
+            <GlassPanel className="p-4 flex items-center justify-between" elevated>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-agent-researcher/10 rounded-lg">
-                  <Clipboard className="w-5 h-5 text-agent-researcher" />
-                </div>
+                <NeonIcon icon={Clipboard} color="#6366F1" size="md" />
                 <div>
                   <h3 className="text-sm font-medium">Clipboard Watcher</h3>
                   <p className="text-xs text-text-muted mt-0.5">Polling OS clipboard every 2s</p>
@@ -99,11 +96,9 @@ export default function ComputerModePage() {
               </div>
             </GlassPanel>
 
-            <GlassPanel className="p-4 flex items-center justify-between border-l-2 border-l-agent-coder">
+            <GlassPanel className="p-4 flex items-center justify-between" elevated>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-agent-coder/10 rounded-lg">
-                  <FileText className="w-5 h-5 text-agent-coder" />
-                </div>
+                <NeonIcon icon={FileText} color="#06B6D4" size="md" />
                 <div>
                   <h3 className="text-sm font-medium">File System Watcher</h3>
                   <p className="text-xs text-text-muted mt-0.5">Rust `notify` crate event hooks</p>
@@ -242,5 +237,6 @@ export default function ComputerModePage() {
         </section>
       </div>
     </div>
+    </PageTransition>
   );
 }

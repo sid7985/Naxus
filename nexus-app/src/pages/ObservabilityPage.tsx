@@ -6,7 +6,9 @@ import {
   AlertTriangle, CheckCircle, XCircle, TrendingUp
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import NeonIcon from '../components/ui/NeonIcon';
 import { useAgentStore } from '../stores/agentStore';
+import PageTransition from '../components/layout/PageTransition';
 
 // Metrics computed dynamically from agentStore
 
@@ -20,14 +22,9 @@ interface MetricCardProps {
 
 function MetricCard({ label, value, icon: Icon, color, trend }: MetricCardProps) {
   return (
-    <GlassPanel className="p-4">
+    <GlassPanel elevated className="p-4">
       <div className="flex items-start justify-between mb-3">
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: `${color}15`, border: `1px solid ${color}25` }}
-        >
-          <Icon className="w-5 h-5" style={{ color }} />
-        </div>
+        <NeonIcon icon={Icon} color={color} size="md" />
         {trend && (
           <div className="flex items-center gap-1 text-xs text-status-done">
             <TrendingUp className="w-3 h-3" />
@@ -59,6 +56,7 @@ export default function ObservabilityPage() {
   const sessionsCount = missionFeed.filter((m) => m.role === 'user').length;
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
@@ -372,5 +370,6 @@ export default function ObservabilityPage() {
         )}
       </div>
     </div>
+    </PageTransition>
   );
 }

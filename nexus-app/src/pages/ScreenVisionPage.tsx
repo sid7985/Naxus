@@ -6,6 +6,7 @@ import {
   Layers, ZoomIn, Info
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageTransition from '../components/layout/PageTransition';
 
 export default function ScreenVisionPage() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function ScreenVisionPage() {
   ];
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
@@ -136,5 +138,6 @@ export default function ScreenVisionPage() {
         )}
       </div>
     </div>
+    </PageTransition>
   );
 }

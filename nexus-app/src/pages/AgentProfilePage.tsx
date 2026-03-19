@@ -6,6 +6,8 @@ import {
   Send, ArrowLeft, Trash2
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import NeonIcon from '../components/ui/NeonIcon';
+import SpatialSidebar from '../components/layout/SpatialSidebar';
 import StatusBadge from '../components/ui/StatusBadge';
 import { useAgentStore } from '../stores/agentStore';
 import { useSettingsStore } from '../stores/settingsStore';
@@ -14,6 +16,7 @@ import { tauri } from '../services/tauri';
 import { memoryService } from '../services/memory';
 import { CODER_TOOLS } from '../agents/tools';
 import { formatTimestamp } from '../lib/utils';
+import PageTransition from '../components/layout/PageTransition';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Crown, Code2, Palette, Megaphone, Bug, Search,
@@ -172,9 +175,10 @@ export default function AgentProfilePage() {
   };
 
   return (
+    <PageTransition>
     <div className="h-full flex">
       {/* Left: Agent Info */}
-      <div className="w-72 border-r border-glass-border flex flex-col p-5 overflow-y-auto shrink-0">
+      <SpatialSidebar position="left" width="w-72" className="p-5 overflow-y-auto">
         <button
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-text-muted hover:text-white transition-colors text-sm mb-6"
@@ -185,15 +189,8 @@ export default function AgentProfilePage() {
 
         {/* Avatar */}
         <div className="flex flex-col items-center mb-6">
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mb-3"
-            style={{
-              background: `${agent.color}20`,
-              border: `2px solid ${agent.color}50`,
-              boxShadow: `0 0 30px ${agent.color}20`,
-            }}
-          >
-            {IconComponent && <IconComponent className="w-8 h-8" style={{ color: agent.color }} />}
+          <div className="mb-3">
+            {IconComponent && <NeonIcon icon={IconComponent} color={agent.color} size="lg" />}
           </div>
           <h2 className="text-xl font-semibold">{agent.name}</h2>
           <span
@@ -273,7 +270,7 @@ export default function AgentProfilePage() {
           <span className="text-xs text-text-muted">Status</span>
           <StatusBadge status={agent.status} showLabel size="md" />
         </div>
-      </div>
+      </SpatialSidebar>
 
       {/* Right: Chat */}
       <div className="flex-1 flex flex-col min-w-0">
@@ -341,8 +338,8 @@ export default function AgentProfilePage() {
         </div>
 
         {/* Input */}
-        <div className="px-4 py-3 border-t border-glass-border">
-          <GlassPanel className="flex items-center gap-2 px-4 py-1">
+        <div className="px-4 py-3">
+          <GlassPanel elevated className="flex items-center gap-2 px-4 py-1">
             <input
               type="text"
               value={input}
@@ -373,5 +370,6 @@ export default function AgentProfilePage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

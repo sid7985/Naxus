@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agent Profile - Agent Alpha</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7C3AED",
+                        "background-dark": "#0A0A0F",
+                        "secondary-text": "#9B9B9B",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .avatar-glow {
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-white overflow-hidden h-screen flex">
+<!-- LEFT — Agent Identity Panel -->
+<aside class="w-[340px] flex-shrink-0 glass-panel flex flex-col h-full relative z-10">
+<!-- Avatar Section -->
+<div class="h-[120px] flex items-center justify-center relative mt-8">
+<div class="size-16 rounded-full bg-primary flex items-center justify-center text-white font-extrabold text-[28px] leading-none select-none avatar-glow">
+                A
+            </div>
+</div>
+<!-- Identity Details -->
+<div class="flex flex-col items-center px-8 text-center">
+<h1 class="text-white font-bold text-[20px] leading-tight mb-2">Agent Alpha</h1>
+<div class="px-3 py-1 rounded-full bg-black border border-primary text-primary text-[11px] font-medium uppercase tracking-wider mb-2">
+                System Intelligence
+            </div>
+<div class="font-mono text-[10px] text-secondary-text">
+                llama3.2:latest
+            </div>
+</div>
+<!-- Scrollable content -->
+<div class="flex-1 overflow-y-auto px-8 py-10 space-y-8 no-scrollbar">
+<!-- Tools Section -->
+<section>
+<h3 class="text-secondary-text font-semibold text-[10px] tracking-[0.2em] uppercase mb-4">Tools</h3>
+<div class="flex flex-col gap-2">
+<div class="h-[32px] flex items-center px-3 bg-white/5 border border-white/10 rounded-[4px] text-secondary-text text-[12px] font-normal hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-[16px] mr-2">globe</span>
+                        Web Search
+                    </div>
+<div class="h-[32px] flex items-center px-3 bg-white/5 border border-white/10 rounded-[4px] text-secondary-text text-[12px] font-normal hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-[16px] mr-2">terminal</span>
+                        Python Interpreter
+                    </div>
+<div class="h-[32px] flex items-center px-3 bg-white/5 border border-white/10 rounded-[4px] text-secondary-text text-[12px] font-normal hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-[16px] mr-2">folder_open</span>
+                        File Browser
+                    </div>
+</div>
+</section>
+<!-- Personality Section -->
+<section class="space-y-6">
+<h3 class="text-secondary-text font-semibold text-[10px] tracking-[0.2em] uppercase">Personality</h3>
+<!-- Tone Slider -->
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-secondary-text text-[12px]">Tone</span>
+</div>
+<div class="relative w-full h-[4px] bg-[#1A1A1A] rounded-full">
+<div class="absolute top-0 left-0 h-full bg-primary rounded-full w-[65%]"></div>
+<div class="absolute top-1/2 left-[65%] -translate-y-1/2 size-3.5 rounded-full bg-primary border-2 border-white shadow-lg cursor-pointer"></div>
+</div>
+</div>
+<!-- Detail Slider -->
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-secondary-text text-[12px]">Detail</span>
+</div>
+<div class="relative w-full h-[4px] bg-[#1A1A1A] rounded-full">
+<div class="absolute top-0 left-0 h-full bg-primary rounded-full w-[40%]"></div>
+<div class="absolute top-1/2 left-[40%] -translate-y-1/2 size-3.5 rounded-full bg-primary border-2 border-white shadow-lg cursor-pointer"></div>
+</div>
+</div>
+</section>
+<!-- Status Section -->
+<section>
+<h3 class="text-secondary-text font-normal text-[12px] mb-2">Status</h3>
+<div class="flex items-center gap-2 text-primary text-[12px] font-medium">
+<span class="size-1.5 rounded-full bg-primary animate-pulse"></span>
+                    Operational
+                </div>
+</section>
+</div>
+</aside>
+<!-- RIGHT — Chat Interface -->
+<main class="flex-1 flex flex-col bg-background-dark">
+<!-- Top Bar -->
+<header class="h-16 flex items-center justify-between px-8 border-b border-white/5">
+<h2 class="text-white font-semibold text-[14px]">Direct Chat</h2>
+<a class="text-secondary-text text-[12px] flex items-center gap-1 hover:text-primary transition-colors" href="#">
+                History ↗
+            </a>
+</header>
+<!-- Chat Messages -->
+<div class="flex-1 overflow-y-auto p-8 space-y-6 flex flex-col no-scrollbar">
+<!-- Agent Message -->
+<div class="flex gap-4 max-w-[80%]">
+<div class="size-8 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white text-[12px] font-bold avatar-glow">A</div>
+<div class="space-y-2">
+<div class="text-secondary-text text-[11px] font-medium uppercase tracking-wider">Agent Alpha</div>
+<div class="text-white text-[13px] leading-relaxed">
+                        Hello. I'm Agent Alpha, powered by the latest Llama 3.2 model. How can I assist you with your system analysis today?
+                    </div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end gap-2 ml-auto max-w-[80%]">
+<div class="bg-white/5 border border-white/10 rounded-lg p-4 text-white text-[13px]">
+                    Can you help me analyze the logs from the secondary production server? I'm seeing an unusual spike in memory consumption.
+                </div>
+<span class="text-secondary-text text-[10px]">Just now</span>
+</div>
+<!-- Agent Message with Tools -->
+<div class="flex gap-4 max-w-[80%]">
+<div class="size-8 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white text-[12px] font-bold avatar-glow">A</div>
+<div class="space-y-4">
+<div class="text-secondary-text text-[11px] font-medium uppercase tracking-wider">Agent Alpha</div>
+<!-- Tool Usage Indicator -->
+<div class="flex items-center gap-2 px-3 py-1.5 bg-black border border-primary/30 rounded w-fit">
+<span class="material-symbols-outlined text-[14px] text-primary">terminal</span>
+<span class="text-[11px] text-secondary-text font-mono">executing analyzer.py...</span>
+</div>
+<div class="text-white text-[13px] leading-relaxed">
+                        I've initiated the file browser to locate the logs. Based on initial telemetry, it looks like a memory leak in the database connector. I'm currently running a Python script to isolate the offending thread.
+                    </div>
+</div>
+</div>
+</div>
+<!-- Bottom Input -->
+<div class="p-8 border-t border-white/5">
+<div class="relative max-w-4xl mx-auto">
+<input class="w-full h-12 bg-white/5 border border-white/10 rounded-lg px-4 text-white text-[13px] focus:outline-none focus:border-primary/50 transition-colors placeholder-secondary-text/50" placeholder="Type a message..." type="text"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-3">
+<button class="material-symbols-outlined text-secondary-text hover:text-primary transition-colors text-[20px]">attach_file</button>
+<button class="material-symbols-outlined text-primary text-[20px] hover:scale-110 transition-transform">send</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

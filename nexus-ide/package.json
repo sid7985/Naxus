@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "nexus-ide",
+  "version": "1.0.0",
+  "workspaces": [
+    "browser-app",
+    "nexus-agent-extension"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "lerna": "^8.0.0"
+  }
+}

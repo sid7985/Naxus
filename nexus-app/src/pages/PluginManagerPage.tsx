@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowLeft, Puzzle, Download, CheckCircle2, Play, Square, Loader2
+  Puzzle, Download, CheckCircle2, Play, Square, Loader2
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageHeader from '../components/layout/PageHeader';
 import { mcpClient, MCPServerConfig } from '../services/mcpClient';
+import PageTransition from '../components/layout/PageTransition';
 
 interface Plugin extends MCPServerConfig {
   icon: string;
@@ -25,7 +26,6 @@ const CORE_PLUGINS: Omit<Plugin, 'installed' | 'is_active'>[] = [
 ];
 
 export default function PluginManagerPage() {
-  const navigate = useNavigate();
   const [plugins, setPlugins] = useState<Plugin[]>([]);
   const [filter, setFilter] = useState<'all' | 'installed' | 'core' | 'community'>('all');
 
@@ -76,42 +76,39 @@ export default function PluginManagerPage() {
 
   const stats = {
     total: plugins.length,
-    installed: plugins.filter((p) => p.installed).length,
-  };
+    installed: plugins.filter((p) => p.installed).length };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="p-1.5 rounded-lg hover:bg-glass transition-colors">
-            <ArrowLeft className="w-4 h-4 text-text-muted" />
-          </button>
-          <Puzzle className="w-5 h-5 text-agent-researcher" />
-          <h1 className="text-sm font-semibold">Plugin Manager</h1>
-          <span className="text-xs text-text-muted font-mono ml-2">{stats.installed}/{stats.total} installed</span>
-        </div>
-      </div>
+      <PageHeader
+        title="Plugin Manager"
+        subtitle="MCP server connections"
+        icon={Puzzle}
+        iconColor="#6366F1"
+        badge={`${stats.installed}/${stats.total} installed`}
+      />
 
       {/* Filters */}
-      <div className="flex items-center gap-1 px-5 py-2 border-b border-glass-border">
-        {(['all', 'installed', 'core', 'community'] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-xs transition-colors capitalize ${
-              filter === f ? 'bg-glass text-white' : 'text-text-muted hover:text-white'
-            }`}
-          >
-            {f}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 px-5 py-2.5">
+        <div className="tab-pills">
+          {(['all', 'installed', 'core', 'community'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`tab-pill capitalize ${filter === f ? 'active' : ''}`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           <AnimatePresence>
-            {filtered.map((plugin) => (
-              <motion.div key={plugin.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            {filtered.map((plugin, idx) => (
+              <motion.div key={plugin.id} layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: idx * 0.05 }}>
                 <GlassPanel hover className="p-4">
                   <div className="flex items-start gap-3">
                     <div className="text-2xl">{plugin.icon}</div>
@@ -162,5 +159,6 @@ export default function PluginManagerPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

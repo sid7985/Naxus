@@ -1,7 +1,9 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { Agent, AgentStatus, Message } from '../lib/types';
 import { DEFAULT_AGENTS } from '../lib/constants';
 import { generateId } from '../lib/utils';
+import { eventBus } from '../services/eventBus';
 
 interface AgentState {
   agents: Agent[];
@@ -21,7 +23,11 @@ interface AgentState {
   incrementAgentMetrics: (agentId: string, metrics: Partial<Agent['metrics']>) => void;
 }
 
-export const useAgentStore = create<AgentState>((set) => ({
+const MAX_FEED_SIZE = 500;
+
+export const useAgentStore = create<AgentState>()(
+  persist(
+    (set) => ({
   agents: DEFAULT_AGENTS,
   activeAgentId: null,
   conversations: {},
@@ -31,11 +37,14 @@ export const useAgentStore = create<AgentState>((set) => ({
     set({ activeAgentId: agentId }),
 
   updateAgentStatus: (agentId, status) =>
-    set((state) => ({
-      agents: state.agents.map((a) =>
-        a.id === agentId ? { ...a, status } : a
-      ),
-    })),
+    set((state) => {
+      eventBus.emit('agent:status-change', { agentId, status });
+      return {
+        agents: state.agents.map((a) =>
+          a.id === agentId ? { ...a, status } : a
+        ),
+      };
+    }),
 
   updateAgentModel: (agentId, model) =>
     set((state) => ({
@@ -70,7 +79,7 @@ export const useAgentStore = create<AgentState>((set) => ({
   addMissionFeedMessage: (message) =>
     set((state) => ({
       missionFeed: [
-        ...state.missionFeed,
+        ...state.missionFeed.slice(-(MAX_FEED_SIZE - 1)),
         { ...message, id: generateId(), timestamp: Date.now() },
       ],
     })),
@@ -95,11 +104,11 @@ export const useAgentStore = create<AgentState>((set) => ({
       conversations: { ...state.conversations, [agentId]: [] },
     })),
 
-  incrementAgentMetrics: (agentId, delta) =>
+      incrementAgentMetrics: (agentId, delta) =>
     set((state) => ({
       agents: state.agents.map((a) => {
         if (a.id !== agentId) return a;
-        return {
+        const updated = {
           ...a,
           metrics: {
             tokensUsed: a.metrics.tokensUsed + (delta.tokensUsed || 0),
@@ -108,6 +117,32 @@ export const useAgentStore = create<AgentState>((set) => ({
             errorCount: a.metrics.errorCount + (delta.errorCount || 0),
           },
         };
+        if (delta.tasksCompleted) {
+          eventBus.emit('agent:task-complete', { agentId, taskId: '', result: '' });
+          eventBus.emit('notification:add', {
+            title: `${a.name} completed a task`,
+            body: `+${delta.tasksCompleted} task(s) finished`,
+            type: 'success',
+          });
+        }
+        if (delta.errorCount) {
+          eventBus.emit('agent:error', { agentId, error: 'Task failed' });
+          eventBus.emit('notification:add', {
+            title: `${a.name} encountered an error`,
+            body: 'Check mission feed for details',
+            type: 'error',
+          });
+        }
+        return updated;
       }),
     })),
-}));
+}),
+    {
+      name: 'nexus-agent-store',
+      partialize: (state) => ({
+        conversations: state.conversations,
+        missionFeed: state.missionFeed.slice(-100), // Persist last 100 only
+      }),
+    }
+  )
+);

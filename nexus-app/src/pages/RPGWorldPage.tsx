@@ -8,6 +8,7 @@ import { useAgentStore } from '../stores/agentStore';
 import { DEFAULT_AGENTS } from '../lib/constants';
 import type { AgentRole } from '../lib/types';
 import '../styles/rpg.css';
+import PageTransition from '../components/layout/PageTransition';
 
 export default function RPGWorldPage() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function RPGWorldPage() {
   }, [navigate]);
 
   return (
+    <PageTransition>
     <div className="rpg-world h-screen w-screen overflow-hidden relative">
       
       {/* TOP HUD: Status Bar */}
@@ -115,5 +117,6 @@ export default function RPGWorldPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

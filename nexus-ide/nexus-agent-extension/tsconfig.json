@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2018",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "sourceMap": true,
+    "jsx": "react",
+    "rootDir": "src",
+    "outDir": "lib",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "src"
+  ]
+}

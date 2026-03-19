@@ -1,0 +1,25 @@
+{
+  "name": "nexus-agent-extension",
+  "version": "1.0.0",
+  "description": "Theia Extension for Nexus AI Agent Sidebar",
+  "dependencies": {
+    "@theia/core": "1.52.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rimraf lib",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "theiaExtensions": [
+    {
+      "frontend": "lib/browser/nexus-agent-frontend-module"
+    }
+  ]
+}

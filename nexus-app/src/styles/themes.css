@@ -1,14 +1,18 @@
 /* ============================================
-   NEXUS Theme System
+   NEXUS Theme System — Neo-Glass Spatial
    4 themes: Dark (default), OLED, Light, High Contrast
    ============================================ */
 
-/* === Theme: Dark (Default) === */
+/* === Theme: Dark (Default — Deep Void) === */
 [data-theme="dark"], :root {
   --bg-void: #0A0A0F;
+  --bg-elevated: #141419;
+  --bg-secondary: #1A1A22;
+  --bg-tertiary: #22222C;
   --bg-glass: rgba(255, 255, 255, 0.04);
   --bg-glass-hover: rgba(255, 255, 255, 0.07);
   --bg-glass-border: rgba(255, 255, 255, 0.1);
+  --border-color: rgba(255, 255, 255, 0.08);
   --glass-blur: blur(20px);
 
   --text-primary: #FFFFFF;
@@ -27,30 +31,44 @@
   --status-acting: #06B6D4;
   --status-done: #10B981;
   --status-error: #F43F5E;
+
+  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --neon-primary: #7C3AED;
+  --neon-secondary: #06B6D4;
 }
 
 /* === Theme: OLED Black === */
 [data-theme="oled"] {
   --bg-void: #000000;
+  --bg-elevated: #0A0A0A;
+  --bg-secondary: #111111;
   --bg-glass: rgba(255, 255, 255, 0.02);
   --bg-glass-hover: rgba(255, 255, 255, 0.05);
   --bg-glass-border: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(255, 255, 255, 0.05);
 
   --text-primary: #EAEAEF;
   --text-secondary: #909098;
   --text-muted: #505058;
+
+  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.8);
+  --neon-primary: #A855F7;
+  --neon-secondary: #22D3EE;
 }
 
-/* === Theme: Soft Light === */
+/* === Theme: Light (VS Code Clone) === */
 [data-theme="light"] {
-  --bg-void: #F4F4F8;
+  --bg-void: #ffffff;
+  --bg-elevated: #f8f8f8;
+  --bg-secondary: #f3f3f3;
   --bg-glass: rgba(0, 0, 0, 0.03);
   --bg-glass-hover: rgba(0, 0, 0, 0.06);
   --bg-glass-border: rgba(0, 0, 0, 0.08);
+  --border-color: #e5e5e5;
 
-  --text-primary: #1A1A2E;
-  --text-secondary: #555570;
-  --text-muted: #9090A0;
+  --text-primary: #333333;
+  --text-secondary: #616161;
+  --text-muted: #858585;
 
   --agent-manager: #6D28D9;
   --agent-coder: #0891B2;
@@ -64,14 +82,21 @@
   --status-acting: #0891B2;
   --status-done: #059669;
   --status-error: #E11D48;
+
+  --shadow-ambient: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --neon-primary: #6D28D9;
+  --neon-secondary: #0891B2;
 }
 
 /* === Theme: High Contrast === */
 [data-theme="highcontrast"] {
   --bg-void: #000000;
+  --bg-elevated: #0D0D0D;
+  --bg-secondary: #1A1A1A;
   --bg-glass: rgba(255, 255, 255, 0.08);
   --bg-glass-hover: rgba(255, 255, 255, 0.12);
   --bg-glass-border: rgba(255, 255, 255, 0.25);
+  --border-color: rgba(255, 255, 255, 0.2);
 
   --text-primary: #FFFFFF;
   --text-secondary: #D0D0DD;
@@ -89,4 +114,8 @@
   --status-acting: #22D3EE;
   --status-done: #34D399;
   --status-error: #FB7185;
+
+  --shadow-ambient: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --neon-primary: #A855F7;
+  --neon-secondary: #22D3EE;
 }

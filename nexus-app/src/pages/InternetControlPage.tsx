@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowLeft, Globe, Wifi, WifiOff, Shield, ShieldAlert,
+  Globe, Wifi, WifiOff, Shield, ShieldAlert,
   ListFilter, Activity, Search, Plus, Trash2, ShieldCheck, Download
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageHeader from '../components/layout/PageHeader';
+import NeonIcon from '../components/ui/NeonIcon';
 import { useSettingsStore } from '../stores/settingsStore';
 import { InternetMode } from '../lib/types';
+import PageTransition from '../components/layout/PageTransition';
 
 export default function InternetControlPage() {
-  const navigate = useNavigate();
   const { internetMode, setInternetMode, allowedDomains, addAllowedDomain, removeAllowedDomain } = useSettingsStore();
 
   const [newDomain, setNewDomain] = useState('');
@@ -40,22 +41,14 @@ export default function InternetControlPage() {
   };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="p-1.5 rounded-lg hover:bg-glass transition-colors">
-             <ArrowLeft className="w-4 h-4 text-text-muted" />
-          </button>
-          <div className="w-6 h-6 rounded flex items-center justify-center bg-emerald-500/20 text-emerald-400">
-             <Shield className="w-3.5 h-3.5" />
-          </div>
-          <div>
-            <h1 className="text-sm font-semibold">Web Capabilities</h1>
-            <p className="text-[10px] text-text-muted mt-0.5">Proxy Rules & Internet Toggle</p>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title="Web Capabilities"
+        subtitle="Proxy Rules & Internet Toggle"
+        icon={Shield}
+        iconColor="#10B981"
+      />
 
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-6 max-w-6xl mx-auto w-full">
@@ -78,9 +71,7 @@ export default function InternetControlPage() {
                   onClick={() => setInternetMode(mode.id)}
                 >
                   <div className="flex items-start justify-between mb-3">
-                     <div className={`p-2 rounded-lg bg-void ${mode.color}`}>
-                       <Icon className="w-5 h-5" />
-                     </div>
+                  <NeonIcon icon={Icon} color={isActive ? '#6366F1' : '#A0A0B0'} size="md" />
                      <div className={`w-3 h-3 rounded-full border-2 ${
                        isActive ? 'border-indigo-400 bg-indigo-500' : 'border-glass-border bg-transparent'
                      }`} />
@@ -94,27 +85,21 @@ export default function InternetControlPage() {
         </section>
 
         {/* Tabs for Whitelist / Logs */}
-        <div className="flex items-center gap-6 border-b border-glass-border mb-6">
-          <button 
-            onClick={() => setActiveTab('rules')}
-            className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === 'rules' ? 'text-indigo-400 border-indigo-400' : 'text-text-muted border-transparent hover:text-white'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <ListFilter className="w-4 h-4" /> Domain Rules
-            </div>
-          </button>
-           <button 
-            onClick={() => setActiveTab('logs')}
-            className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
-              activeTab === 'logs' ? 'text-indigo-400 border-indigo-400' : 'text-text-muted border-transparent hover:text-white'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Activity className="w-4 h-4" /> Request Audit Log
-            </div>
-          </button>
+        <div className="flex items-center gap-2 px-6 pb-4">
+          <div className="tab-pills">
+            <button 
+              onClick={() => setActiveTab('rules')}
+              className={`tab-pill flex items-center gap-2 ${activeTab === 'rules' ? 'active' : ''}`}
+            >
+              <ListFilter className="w-3.5 h-3.5" /> Domain Rules
+            </button>
+            <button 
+              onClick={() => setActiveTab('logs')}
+              className={`tab-pill flex items-center gap-2 ${activeTab === 'logs' ? 'active' : ''}`}
+            >
+              <Activity className="w-3.5 h-3.5" /> Request Audit Log
+            </button>
+          </div>
         </div>
 
         {/* Tab Content */}
@@ -244,5 +229,6 @@ export default function InternetControlPage() {
 
       </div>
     </div>
+    </PageTransition>
   );
 }

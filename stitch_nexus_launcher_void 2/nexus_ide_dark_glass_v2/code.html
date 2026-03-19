@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS IDE - ChargeLink</title>
+<!-- Google Fonts: JetBrains Mono for Code, Inter for UI -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              background: '#0A0A0F',
+              activity: '#0D0D12',
+              sidebar: '#0F0F14',
+              accent: '#7C3AED',
+              textPrimary: '#FFFFFF',
+              textSecondary: '#9B9B9B',
+              syntaxKeyword: '#7C3AED',
+              syntaxString: '#10B981',
+              syntaxComment: '#6366F1'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="layout-styles">
+    body {
+      background-color: #0A0A0F;
+      color: white;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(8px);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .active-tab {
+      background-color: #0A0A0F;
+      border-bottom: 2px solid #7C3AED;
+    }
+    .code-line:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col">
+<!-- BEGIN: Main Container -->
+<div class="flex flex-1 overflow-hidden" data-purpose="app-shell">
+<!-- BEGIN: Activity Bar -->
+<aside class="w-[48px] bg-brand-activity flex flex-col items-center py-4 gap-6 border-r border-white/5" data-purpose="activity-bar">
+<div class="text-brand-accent mb-2">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+</div>
+<div class="text-white">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><line x1="9" x2="9" y1="3" y2="21"></line></svg>
+</div>
+<div class="text-brand-textSecondary hover:text-white cursor-pointer">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+</div>
+<div class="text-brand-textSecondary hover:text-white cursor-pointer">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+</div>
+<div class="mt-auto text-brand-textSecondary hover:text-white cursor-pointer mb-2">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+</div>
+</aside>
+<!-- END: Activity Bar -->
+<!-- BEGIN: Primary Sidebar -->
+<section class="w-[260px] bg-brand-sidebar flex flex-col border-r border-white/5" data-purpose="file-explorer">
+<div class="px-4 py-3 text-[11px] font-bold tracking-wider text-brand-textSecondary uppercase">
+        Explorer: ChargeLink
+      </div>
+<div class="flex-1 overflow-y-auto py-2">
+<!-- Project Folders -->
+<div class="flex items-center px-4 py-1 gap-2 text-white text-sm cursor-pointer">
+<svg class="text-brand-textSecondary" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+<span class="font-medium">app</span>
+</div>
+<div class="flex items-center px-8 py-1 gap-2 text-white text-sm cursor-pointer">
+<svg class="text-brand-textSecondary" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+<span class="font-medium">src</span>
+</div>
+<div class="flex items-center px-12 py-1 gap-2 text-white text-sm cursor-pointer">
+<svg class="text-brand-textSecondary" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+<span class="font-medium">main</span>
+</div>
+<div class="flex items-center px-16 py-1 gap-2 text-white text-sm cursor-pointer">
+<svg class="text-brand-textSecondary" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+<span class="font-medium">ui</span>
+</div>
+<!-- Active File -->
+<div class="flex items-center px-20 py-1.5 gap-2 text-white text-sm bg-brand-accent/10 border-r-2 border-brand-accent cursor-pointer">
+<svg class="text-brand-accent" fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+<span class="font-medium">LoginScreen.kt</span>
+</div>
+<!-- Other Files -->
+<div class="flex items-center px-20 py-1 gap-2 text-brand-textSecondary text-sm hover:text-white cursor-pointer">
+<svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+<span class="font-medium">Theme.kt</span>
+</div>
+</div>
+</section>
+<!-- END: Primary Sidebar -->
+<!-- BEGIN: Main Editor and Terminal -->
+<main class="flex-1 flex flex-col bg-brand-background overflow-hidden" data-purpose="editor-area">
+<!-- Editor Tab Bar -->
+<div class="h-9 bg-brand-activity flex items-center border-b border-white/5" data-purpose="tab-bar">
+<div class="active-tab h-full px-4 flex items-center gap-2 text-xs text-white border-r border-white/5 cursor-default">
+<svg class="text-brand-accent" fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          LoginScreen.kt
+          <svg class="ml-2 hover:bg-white/10 rounded" fill="none" height="10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</div>
+<div class="h-full px-4 flex items-center gap-2 text-xs text-brand-textSecondary border-r border-white/5 cursor-pointer hover:bg-white/5">
+          Theme.kt
+        </div>
+</div>
+<!-- Editor Content -->
+<div class="flex-1 overflow-auto font-mono text-sm leading-6 p-4" data-purpose="code-editor">
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">1</span>
+<span><span class="text-brand-syntaxKeyword">package</span> com.nexus.chargelink.ui</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">2</span>
+<span></span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">3</span>
+<span><span class="text-brand-syntaxKeyword">import</span> androidx.compose.runtime.Composable</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">4</span>
+<span><span class="text-brand-syntaxKeyword">import</span> androidx.compose.material3.*</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">5</span>
+<span></span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">6</span>
+<span><span class="text-brand-syntaxComment">// Component for the main login screen entry point</span></span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">7</span>
+<span><span class="text-brand-syntaxKeyword">@Composable</span></span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">8</span>
+<span><span class="text-brand-syntaxKeyword">fun</span> <span class="text-white">LoginScreen</span>() {</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">9</span>
+<span class="pl-4">Column(modifier = Modifier.fillMaxSize()) {</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">10</span>
+<span class="pl-8">Text(</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">11</span>
+<span class="pl-12 text-brand-syntaxString">"Welcome to ChargeLink"</span>,
+        </div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">12</span>
+<span class="pl-12">style = MaterialTheme.typography.headlineLarge</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">13</span>
+<span class="pl-8">)</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">14</span>
+<span class="pl-8">Spacer(modifier = Modifier.height(<span class="text-brand-syntaxString">32.dp</span>))</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">15</span>
+<span class="pl-8"><span class="text-brand-syntaxComment">// AI-Suggestion: Add username field here</span></span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">16</span>
+<span class="pl-4">}</span>
+</div>
+<div class="flex code-line">
+<span class="w-10 text-right pr-4 text-brand-textSecondary select-none">17</span>
+<span>}</span>
+</div>
+</div>
+<!-- Terminal Panel -->
+<div class="h-48 border-t border-white/5 bg-brand-background flex flex-col" data-purpose="terminal-panel">
+<div class="flex items-center px-4 py-2 bg-brand-activity/50 border-b border-white/5">
+<div class="flex gap-4 text-[11px] font-bold text-brand-textSecondary uppercase">
+<span class="text-white border-b border-brand-accent">Terminal</span>
+<span class="hover:text-white cursor-pointer">Build</span>
+<span class="hover:text-white cursor-pointer">Logcat</span>
+</div>
+</div>
+<div class="flex-1 p-3 font-mono text-xs text-brand-textSecondary overflow-y-auto">
+<div class="flex gap-2 mb-1">
+<span class="text-brand-syntaxString">nexus@charge-link:~/project$</span>
+<span>./gradlew assembleDebug</span>
+</div>
+<div class="text-white/40 mb-1">&gt; Task :app:compileDebugKotlin</div>
+<div class="text-white/40 mb-1">&gt; Task :app:processDebugResources</div>
+<div class="text-brand-syntaxString">BUILD SUCCESSFUL in 12s</div>
+<div class="flex gap-2">
+<span class="text-brand-syntaxString">nexus@charge-link:~/project$</span>
+<span class="animate-pulse">|</span>
+</div>
+</div>
+</div>
+</main>
+<!-- END: Main Editor and Terminal -->
+<!-- BEGIN: Right AI Assistant Panel -->
+<aside class="w-[380px] glass-panel flex flex-col" data-purpose="ai-assistant">
+<div class="px-6 py-4 flex items-center justify-between border-b border-white/10">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-brand-syntaxString"></div>
+<span class="text-sm font-semibold tracking-wide uppercase">Nexus AI Assistant</span>
+</div>
+<svg class="text-brand-textSecondary" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</div>
+<!-- Chat History -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6" data-purpose="chat-history">
+<!-- User message -->
+<div class="flex flex-col items-end gap-2">
+<div class="bg-white/5 p-3 rounded-2xl rounded-tr-none text-sm max-w-[90%] border border-white/5">
+            How can I optimize the <span class="text-brand-accent">LoginScreen.kt</span> layout for accessibility?
+          </div>
+<span class="text-[10px] text-brand-textSecondary">14:02 PM</span>
+</div>
+<!-- AI message -->
+<div class="flex flex-col items-start gap-2">
+<div class="bg-brand-accent/10 p-4 rounded-2xl rounded-tl-none text-sm max-w-[90%] border border-brand-accent/20">
+<p class="mb-3">For better accessibility in Jetpack Compose, I recommend:</p>
+<ul class="list-disc list-inside space-y-2 text-brand-textSecondary">
+<li>Add <code class="text-white">contentDescription</code> to image elements.</li>
+<li>Use <code class="text-white">Modifier.semantics</code> for custom components.</li>
+<li>Ensure touch targets are at least <code class="text-white">48.dp</code>.</li>
+</ul>
+<div class="mt-4 flex gap-2">
+<button class="px-3 py-1.5 bg-brand-accent text-xs font-medium rounded hover:bg-brand-accent/80 transition-colors">Apply Fixes</button>
+<button class="px-3 py-1.5 bg-white/5 text-xs font-medium rounded hover:bg-white/10 transition-colors">Explain More</button>
+</div>
+</div>
+<span class="text-[10px] text-brand-textSecondary">Nexus AI • 14:02 PM</span>
+</div>
+</div>
+<!-- Chat Input -->
+<div class="p-6 border-t border-white/10">
+<div class="relative">
+<textarea class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-brand-accent resize-none placeholder-brand-textSecondary" placeholder="Ask Nexus anything..." rows="3"></textarea>
+<div class="absolute bottom-3 right-3 flex gap-2">
+<button class="p-1.5 text-brand-textSecondary hover:text-white">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: Right AI Assistant Panel -->
+</div>
+<!-- END: Main Container -->
+<!-- BEGIN: Bottom Status Bar -->
+<footer class="h-6 bg-brand-accent flex items-center px-3 justify-between text-[11px] text-white select-none" data-purpose="status-bar">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 hover:bg-white/10 px-2 h-full cursor-pointer">
+<svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+<span>0 Errors</span>
+</div>
+<div class="flex items-center gap-1.5 hover:bg-white/10 px-2 h-full cursor-pointer">
+<svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
+<span>2 Warnings</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hover:bg-white/10 px-2 h-full cursor-pointer">Line 12, Col 48</div>
+<div class="hover:bg-white/10 px-2 h-full cursor-pointer">Spaces: 4</div>
+<div class="hover:bg-white/10 px-2 h-full cursor-pointer">UTF-8</div>
+<div class="hover:bg-white/10 px-2 h-full cursor-pointer font-bold">Kotlin</div>
+</div>
+</footer>
+<!-- END: Bottom Status Bar -->
+</body></html>

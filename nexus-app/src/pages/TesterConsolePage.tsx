@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ArrowLeft, Terminal, Play, Square,
+import { Terminal, Play, Square,
   CheckCircle2, AlertCircle, RefreshCw, Eye, Brain, Bug, Layers 
 } from 'lucide-react';
 import StatusBadge from '../components/ui/StatusBadge';
+import PageHeader from '../components/layout/PageHeader';
+import SpatialSidebar from '../components/layout/SpatialSidebar';
+import PageTransition from '../components/layout/PageTransition';
 
 type AgentRole = 'planner' | 'generator' | 'healer';
 type StepStatus = 'pending' | 'active' | 'success' | 'failed' | 'healing';
@@ -63,7 +64,6 @@ const DEMO_STEPS: TestStep[] = [
 ];
 
 export default function TesterConsolePage() {
-  const navigate = useNavigate();
   const [isRunning, setIsRunning] = useState(false);
   const [steps] = useState<TestStep[]>(DEMO_STEPS);
   const [selectedStep, setSelectedStep] = useState<string | null>('s5');
@@ -89,46 +89,40 @@ export default function TesterConsolePage() {
   const activeTest = steps.find(s => s.id === selectedStep) || steps[0];
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="p-1.5 rounded-lg hover:bg-glass transition-colors">
-            <ArrowLeft className="w-4 h-4 text-text-muted" />
-          </button>
-          <Layers className="w-5 h-5 text-indigo-400" />
-          <div>
-            <h1 className="text-sm font-semibold">Tester Agent Console</h1>
-            <p className="text-[10px] text-text-muted mt-0.5">Tri-Agent UI Verification Suite</p>
+      <PageHeader
+        title="Tester Agent Console"
+        subtitle="Tri-Agent UI Verification Suite"
+        icon={Layers}
+        iconColor="#6366F1"
+        actions={
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4 mr-4">
+              <StatusBadge status="acting" showLabel />
+              <StatusBadge status="acting" showLabel />
+              <StatusBadge status="idle" showLabel />
+            </div>
+            <button 
+              onClick={() => setIsRunning(!isRunning)}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-xl text-sm font-medium transition-all ${
+                isRunning 
+                  ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/20' 
+                  : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
+              }`}
+            >
+              {isRunning ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {isRunning ? 'Stop Test' : 'Run Suite'}
+            </button>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-4 mr-4 border-r border-glass-border pr-5 hidden sm:flex">
-            <StatusBadge status="acting" showLabel />
-            <StatusBadge status="acting" showLabel />
-            <StatusBadge status="idle" showLabel />
-          </div>
-
-          <button 
-            onClick={() => setIsRunning(!isRunning)}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
-              isRunning 
-                ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' 
-                : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
-            }`}
-          >
-            {isRunning ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            {isRunning ? 'Stop Test' : 'Run Suite'}
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Main Content */}
-      <div className="flex-1 overflow-hidden grid grid-cols-12">
+      <div className="flex-1 overflow-hidden flex">
         
         {/* Left Col: Step Sequence */}
-        <div className="col-span-12 lg:col-span-4 border-r border-glass-border bg-glass/20 flex flex-col">
+        <SpatialSidebar position="left" width="w-80">
           <div className="p-4 border-b border-glass-border flex justify-between items-center bg-void/50">
             <h2 className="text-sm font-medium">Execution Plan</h2>
             <button className="text-xs text-text-muted hover:text-white flex items-center gap-1">
@@ -175,10 +169,10 @@ export default function TesterConsolePage() {
               </motion.button>
             ))}
           </div>
-        </div>
+        </SpatialSidebar>
 
         {/* Right Col: Live Inspector */}
-        <div className="col-span-12 lg:col-span-8 flex flex-col">
+        <div className="flex-1 flex flex-col min-w-0">
           
           {/* Virtual Screen View */}
           <div className="flex-1 p-5 flex flex-col items-center justify-center bg-void relative overflow-hidden">
@@ -222,8 +216,8 @@ export default function TesterConsolePage() {
           </div>
 
           {/* Terminal Logs */}
-          <div className="h-64 bg-[#0a0a0f] border-t border-glass-border p-4 font-mono text-xs overflow-y-auto">
-            <h3 className="text-text-muted mb-4 flex items-center gap-2 sticky top-0 bg-[#0a0a0f] pb-2 border-b border-glass-border/30">
+          <div className="h-64 bg-void border-t border-glass-border p-4 font-mono text-xs overflow-y-auto">
+            <h3 className="text-text-muted mb-4 flex items-center gap-2 sticky top-0 bg-void pb-2 border-b border-glass-border/30">
               <Terminal className="w-3.5 h-3.5" /> 
               Execution Trace ({activeTest?.id})
             </h3>
@@ -261,5 +255,6 @@ export default function TesterConsolePage() {
 
       </div>
     </div>
+    </PageTransition>
   );
 }

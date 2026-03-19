@@ -11,6 +11,7 @@ import { useSettingsStore } from '../stores/settingsStore';
 import { ollama } from '../services/ollama';
 import type { OllamaModel } from '../lib/types';
 import { DEFAULT_AGENTS, APP_NAME, APP_TAGLINE, APP_SUBTITLE } from '../lib/constants';
+import PageTransition from '../components/layout/PageTransition';
 
 const AGENT_ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Crown, Code2, Palette, Megaphone, Bug, Search,
@@ -63,6 +64,7 @@ export default function LauncherPage() {
   };
 
   return (
+    <PageTransition>
     <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-start md:justify-center overflow-y-auto overflow-x-hidden nebula-bg py-12 px-4">
       {/* Animated background orbs */}
       <motion.div
@@ -351,5 +353,6 @@ export default function LauncherPage() {
         </button>
       </motion.div>
     </div>
+    </PageTransition>
   );
 }

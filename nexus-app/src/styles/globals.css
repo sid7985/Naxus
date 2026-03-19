@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
-/* ===== NEXUS Design System ===== */
+/* ===== NEXUS Design System — Neo-Glass Spatial ===== */
 
 @theme {
   /* Backgrounds */
   --color-void: #0A0A0F;
   --color-void-light: #12121A;
+  --color-elevated: #141419;
   --color-glass: rgba(255, 255, 255, 0.04);
   --color-glass-hover: rgba(255, 255, 255, 0.08);
   --color-glass-border: rgba(255, 255, 255, 0.1);
-  --color-glass-border-bright: rgba(255, 255, 255, 0.15);
+  --color-glass-border-bright: rgba(255, 255, 255, 0.18);
 
   /* Agent Accent Colors */
   --color-agent-manager: #7C3AED;
@@ -38,6 +39,48 @@
   /* Animation */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius Scale */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* Z-Index Scale */
+  --z-sidebar: 10;
+  --z-header: 20;
+  --z-modal: 30;
+  --z-toast: 40;
+  --z-palette: 50;
+
+  /* Type Scale */
+  --text-2xs: 0.5625rem;
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-body: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  /* Shadows */
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-glass-elevated: 0 16px 48px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-neon: 0 0 30px -5px;
 }
 
 /* ===== Global Styles ===== */
@@ -66,8 +109,8 @@
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
 
   ::-webkit-scrollbar-track {
@@ -75,42 +118,98 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
   }
 }
 
 /* ===== Utility Classes ===== */
 
 @layer utilities {
+
+  /* --- Base Glass Panel --- */
   .glass-panel {
     background: var(--color-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--color-glass-border);
-    border-radius: 12px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
   }
 
   .glass-panel-hover {
     background: var(--color-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--color-glass-border);
-    border-radius: 12px;
-    transition: all 200ms var(--ease-smooth);
+    border-radius: 16px;
+    box-shadow: var(--shadow-glass);
+    transition: all 250ms var(--ease-smooth);
   }
 
   .glass-panel-hover:hover {
     background: var(--color-glass-hover);
     border-color: var(--color-glass-border-bright);
+    box-shadow: var(--shadow-glass-elevated);
+    transform: translateY(-1px);
   }
 
+  /* --- Elevated Panels (Floating above void) --- */
+  .glass-elevated {
+    background: var(--color-elevated);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid var(--color-glass-border-bright);
+    border-radius: 20px;
+    box-shadow: var(--shadow-glass-elevated);
+  }
+
+  /* --- Spatial Sidebar (Detached floating pill) --- */
+  .spatial-sidebar {
+    background: var(--color-elevated);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 20px;
+    box-shadow: var(--shadow-glass-elevated);
+    margin: 10px;
+  }
+
+  /* --- Neon Icon Glow Container --- */
+  .neon-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .neon-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--neon-color, #7C3AED) 0%, transparent 70%);
+    opacity: 0.15;
+  }
+  .neon-icon::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: radial-gradient(circle at center, var(--neon-color, #7C3AED), transparent 70%);
+    opacity: 0.1;
+    filter: blur(8px);
+    z-index: -1;
+  }
+
+  /* --- Glow Utilities --- */
   .agent-glow {
-    box-shadow: 0 0 20px -5px var(--glow-color, rgba(124, 58, 237, 0.3));
+    box-shadow: 0 0 25px -5px var(--glow-color, rgba(124, 58, 237, 0.3));
   }
 
   .text-gradient {
@@ -124,7 +223,7 @@
     font-family: var(--font-mono);
   }
 
-  /* Particle nebula background */
+  /* --- Atmospheric Nebula Background --- */
   .nebula-bg {
     position: relative;
     background:
@@ -134,13 +233,143 @@
       #0A0A0F;
   }
 
-  /* Agent pulse animation */
+  /* --- Animations --- */
+
+  /* Agent pulse (idle breathing) */
   @keyframes agent-pulse {
     0%, 100% { opacity: 0.6; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.05); }
   }
-
   .animate-pulse-agent {
     animation: agent-pulse 2s ease-in-out infinite;
+  }
+
+  /* Thought pulse — agent border glow when thinking */
+  @keyframes thought-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0px 0px var(--thought-color, rgba(124, 58, 237, 0.0));
+      border-color: var(--color-glass-border);
+    }
+    50% {
+      box-shadow: 0 0 20px 2px var(--thought-color, rgba(124, 58, 237, 0.4));
+      border-color: var(--thought-color, rgba(124, 58, 237, 0.5));
+    }
+  }
+  .animate-thought-pulse {
+    animation: thought-pulse 2.5s ease-in-out infinite;
+  }
+
+  /* Page enter (used by PageTransition wrapper) */
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: scale(0.97) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0px);
+    }
+  }
+  .animate-page-enter {
+    animation: page-enter 0.4s var(--ease-smooth) forwards;
+  }
+
+  /* Neon border shimmer */
+  @keyframes neon-shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .neon-border {
+    position: relative;
+    overflow: hidden;
+  }
+  .neon-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--neon-color, #7C3AED), #06B6D4, var(--neon-color, #7C3AED));
+    background-size: 200% 200%;
+    animation: neon-shimmer 4s linear infinite;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* --- Glass Input (elevated input with neon focus) --- */
+  .glass-input {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: var(--color-glass);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 12px;
+    color: white;
+    font-size: 0.8125rem;
+    outline: none;
+    transition: all 200ms var(--ease-smooth);
+  }
+  .glass-input::placeholder {
+    color: var(--color-text-muted);
+  }
+  .glass-input:focus {
+    border-color: rgba(124, 58, 237, 0.5);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1), var(--shadow-glass);
+  }
+
+  /* --- Tab Pill (glass pill tabs) --- */
+  .tab-pills {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: var(--color-glass);
+    border-radius: 14px;
+    border: 1px solid var(--color-glass-border);
+  }
+  .tab-pill {
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: all 200ms var(--ease-smooth);
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+  .tab-pill:hover {
+    color: var(--color-text-primary);
+  }
+  .tab-pill.active {
+    background: var(--color-elevated);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* --- Spatial Detail Panel (floating right panel) --- */
+  .spatial-detail-panel {
+    background: var(--color-elevated);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 20px;
+    box-shadow: var(--shadow-glass-elevated);
+    margin: 10px;
+    margin-left: 0;
+    overflow: hidden;
+  }
+  /* --- Responsive Safety Net --- */
+  @media (max-width: 768px) {
+    .spatial-sidebar {
+      display: none;
+    }
+  }
+
+  #root {
+    min-width: 768px;
   }
 }

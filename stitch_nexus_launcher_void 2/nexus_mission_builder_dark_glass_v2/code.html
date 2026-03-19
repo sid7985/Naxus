@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS - Mission Builder</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'nexus-bg': '#0A0A0F',
+            'nexus-violet': '#7C3AED',
+            'nexus-cyan': '#06B6D4',
+            'nexus-amber': '#F59E0B',
+            'nexus-emerald': '#10B981',
+            'nexus-rose': '#F43F5E',
+            'nexus-indigo': '#6366F1',
+            'nexus-border': 'rgba(255,255,255,0.1)',
+            'nexus-glass': 'rgba(255,255,255,0.04)',
+            'nexus-muted': '#444444',
+            'nexus-placeholder': '#333333'
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-animations">
+    /* Custom glow transition for the hero textarea focus */
+    .hero-textarea:focus {
+      outline: none;
+      border-bottom: 1px solid #7C3AED;
+      box-shadow: 0 4px 10px -4px rgba(124, 58, 237, 0.5);
+    }
+    
+    /* Custom glass card hover states */
+    .agent-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .agent-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0A0F;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body class="bg-nexus-bg text-white font-sans min-h-screen">
+<!-- BEGIN: MainContainer -->
+<main class="max-w-[720px] mx-auto px-6 py-12 flex flex-col gap-12">
+<!-- BEGIN: Breadcrumbs -->
+<nav data-purpose="breadcrumb-navigation">
+<span class="text-[12px] text-nexus-muted tracking-wide">Workspace › New Mission</span>
+</nav>
+<!-- END: Breadcrumbs -->
+<!-- BEGIN: HeroSection -->
+<section data-purpose="mission-input-area">
+<textarea class="hero-textarea w-full bg-nexus-bg border-0 border-b border-nexus-muted py-4 text-2xl text-white placeholder-nexus-placeholder resize-none transition-all duration-300" placeholder="Describe what you want to build..." rows="2"></textarea>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: AgentSelection -->
+<section data-purpose="agent-grid-section">
+<h2 class="text-[10px] text-nexus-muted uppercase tracking-[0.2em] mb-6">Select Specialized Agents</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Agent: Manager (Selected Example) -->
+<div class="agent-card p-5 rounded-lg bg-nexus-glass border border-nexus-violet cursor-pointer flex flex-col items-center gap-3" data-purpose="agent-item">
+<div class="w-10 h-10 rounded-full bg-nexus-violet/15 flex items-center justify-center text-nexus-violet">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+</div>
+<span class="text-sm font-medium">Manager</span>
+</div>
+<!-- Agent: Coder -->
+<div class="agent-card p-5 rounded-lg bg-nexus-glass border border-nexus-border cursor-pointer flex flex-col items-center gap-3" data-purpose="agent-item">
+<div class="w-10 h-10 rounded-full bg-nexus-cyan/15 flex items-center justify-center text-nexus-cyan">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+</div>
+<span class="text-sm font-medium">Coder</span>
+</div>
+<!-- Agent: Designer -->
+<div class="agent-card p-5 rounded-lg bg-nexus-glass border border-nexus-border cursor-pointer flex flex-col items-center gap-3" data-purpose="agent-item">
+<div class="w-10 h-10 rounded-full bg-nexus-amber/15 flex items-center justify-center text-nexus-amber">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l5 2"></path><path d="M9 11c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></svg>
+</div>
+<span class="text-sm font-medium">Designer</span>
+</div>
+<!-- Agent: Marketer -->
+<div class="agent-card p-5 rounded-lg bg-nexus-glass border border-nexus-border cursor-pointer flex flex-col items-center gap-3" data-purpose="agent-item">
+<div class="w-10 h-10 rounded-full bg-nexus-emerald/15 flex items-center justify-center text-nexus-emerald">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 5h2M11 9h2M11 13h2M11 17h2"></path><rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect><path d="M17 2v20M7 2v20"></path></svg>
+</div>
+<span class="text-sm font-medium">Marketer</span>
+</div>
+<!-- Agent: Tester -->
+<div class="agent-card p-5 rounded-lg bg-nexus-glass border border-nexus-border cursor-pointer flex flex-col items-center gap-3" data-purpose="agent-item">
+<div class="w-10 h-10 rounded-full bg-nexus-rose/15 flex items-center justify-center text-nexus-rose">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path></svg>
+</div>
+<span class="text-sm font-medium">Tester</span>
+</div>
+<!-- Agent: Researcher -->
+<div class="agent-card p-5 rounded-lg bg-nexus-glass border border-nexus-border cursor-pointer flex flex-col items-center gap-3" data-purpose="agent-item">
+<div class="w-10 h-10 rounded-full bg-nexus-indigo/15 flex items-center justify-center text-nexus-indigo">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+</div>
+<span class="text-sm font-medium">Researcher</span>
+</div>
+</div>
+</section>
+<!-- END: AgentSelection -->
+<!-- BEGIN: MissionBrief -->
+<section data-purpose="mission-summary-card">
+<div class="bg-nexus-glass border border-nexus-border rounded-lg p-6">
+<h3 class="text-[11px] text-nexus-violet uppercase tracking-wider mb-6 font-semibold">Mission Brief</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-start border-b border-nexus-border/50 pb-3">
+<span class="text-xs text-white/60">Objective</span>
+<span class="text-xs text-white max-w-[70%] text-right">Autonomous high-frequency trading algorithm with risk management protocols.</span>
+</div>
+<div class="flex justify-between items-start border-b border-nexus-border/50 pb-3">
+<span class="text-xs text-white/60">Selected Unit</span>
+<span class="text-xs text-white">Manager, Coder</span>
+</div>
+<div class="flex justify-between items-start pb-1">
+<span class="text-xs text-white/60">Priority Level</span>
+<span class="text-xs text-white">Class-A Alpha</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: MissionBrief -->
+<!-- BEGIN: ActionFooter -->
+<footer class="flex items-center justify-between mt-4" data-purpose="bottom-navigation-actions">
+<button class="text-xs font-medium text-white/60 hover:text-white transition-colors duration-200 px-4 py-2" data-purpose="secondary-action">
+        Edit Brief
+      </button>
+<button class="bg-nexus-violet hover:bg-violet-700 text-white text-sm font-bold tracking-widest px-10 py-4 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-nexus-violet/20" data-purpose="primary-action">
+        LAUNCH MISSION 🚀
+      </button>
+</footer>
+<!-- END: ActionFooter -->
+</main>
+<!-- END: MainContainer -->
+<script data-purpose="agent-selection-logic">
+    // Simple toggle logic for the prototype aesthetic
+    document.querySelectorAll('.agent-card').forEach(card => {
+      card.addEventListener('click', () => {
+        // Toggle selected styling
+        const isSelected = card.classList.contains('border-nexus-violet');
+        
+        // Find the color based on the icon circle child
+        const iconDiv = card.querySelector('div');
+        let activeColorClass = '';
+        if (iconDiv.classList.contains('text-nexus-cyan')) activeColorClass = 'border-nexus-cyan';
+        else if (iconDiv.classList.contains('text-nexus-amber')) activeColorClass = 'border-nexus-amber';
+        else if (iconDiv.classList.contains('text-nexus-emerald')) activeColorClass = 'border-nexus-emerald';
+        else if (iconDiv.classList.contains('text-nexus-rose')) activeColorClass = 'border-nexus-rose';
+        else if (iconDiv.classList.contains('text-nexus-indigo')) activeColorClass = 'border-nexus-indigo';
+        else activeColorClass = 'border-nexus-violet';
+
+        if (isSelected) {
+          card.classList.remove(activeColorClass);
+          card.classList.add('border-nexus-border');
+        } else {
+          card.classList.remove('border-nexus-border');
+          card.classList.add(activeColorClass);
+        }
+      });
+    });
+  </script>
+</body></html>

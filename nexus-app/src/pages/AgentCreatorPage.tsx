@@ -5,6 +5,7 @@ import {
   ArrowLeft, UserPlus, Sparkles, Save
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageTransition from '../components/layout/PageTransition';
 
 const ROLE_PRESETS = [
   { role: 'devops', name: 'DevOps', icon: '⚙️', color: '#8B5CF6', desc: 'CI/CD, Docker, cloud infrastructure' },
@@ -56,6 +57,7 @@ export default function AgentCreatorPage() {
   const steps = ['Identity', 'Personality', 'Tools', 'Review'];
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
@@ -354,5 +356,6 @@ export default function AgentCreatorPage() {
         )}
       </div>
     </div>
+    </PageTransition>
   );
 }

@@ -2,7 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Cloud, MousePointerClick, Code2, Layers, ChevronRight } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import NeonIcon from '../components/ui/NeonIcon';
 import { APP_NAME } from '../lib/constants';
+import PageTransition from '../components/layout/PageTransition';
 
 const PRODUCTS = [
   {
@@ -60,6 +62,7 @@ export default function LaunchSelectionPage() {
   const navigate = useNavigate();
 
   return (
+    <PageTransition>
     <div className="h-full w-full flex flex-col items-center justify-center relative overflow-hidden nebula-bg p-8">
       {/* Animated background orbs */}
       <motion.div
@@ -96,17 +99,13 @@ export default function LaunchSelectionPage() {
             <motion.div key={product.id} variants={itemVariants}>
               <GlassPanel 
                 hover 
+                elevated
                 glowColor={product.color}
                 className="h-full p-6 cursor-pointer group flex flex-col items-start transition-all duration-300 hover:scale-[1.02]"
                 onClick={() => navigate(product.path)}
               >
                 <div className="flex items-center justify-between w-full mb-4">
-                  <div 
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110"
-                    style={{ background: `linear-gradient(135deg, ${product.color}20, ${product.color}40)`, border: `1px solid ${product.color}50` }}
-                  >
-                    <Icon className="w-7 h-7" style={{ color: product.color }} />
-                  </div>
+                  <NeonIcon icon={Icon} color={product.color} size="lg" />
                   <div className="w-8 h-8 rounded-full bg-glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-x-[-10px] group-hover:translate-x-0">
                     <ChevronRight className="w-5 h-5 text-white" />
                   </div>
@@ -127,5 +126,6 @@ export default function LaunchSelectionPage() {
         })}
       </motion.div>
     </div>
+    </PageTransition>
   );
 }

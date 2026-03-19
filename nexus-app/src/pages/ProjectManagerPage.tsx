@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ArrowLeft, FolderOpen, Plus, GitBranch, Clock,
+import { FolderOpen, Plus, GitBranch, Clock,
   Star, Trash2
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageHeader from '../components/layout/PageHeader';
+import PageTransition from '../components/layout/PageTransition';
 
 interface Project {
   id: string;
@@ -22,32 +22,26 @@ const DEMO_PROJECTS: Project[] = [
   {
     id: 'p1', name: 'NEXUS App', path: '~/nexus-workspace',
     lastOpened: Date.now() - 300000, missionsRun: 24, status: 'active',
-    agents: ['manager', 'coder', 'designer'], starred: true,
-  },
+    agents: ['manager', 'coder', 'designer'], starred: true },
   {
     id: 'p2', name: 'Landing Page v2', path: '~/projects/landing-v2',
     lastOpened: Date.now() - 86400000, missionsRun: 8, status: 'active',
-    agents: ['designer', 'coder', 'marketer'], starred: false,
-  },
+    agents: ['designer', 'coder', 'marketer'], starred: false },
   {
     id: 'p3', name: 'Mobile App Research', path: '~/projects/mobile-research',
     lastOpened: Date.now() - 172800000, missionsRun: 5, status: 'paused',
-    agents: ['researcher'], starred: false,
-  },
+    agents: ['researcher'], starred: false },
   {
     id: 'p4', name: 'API Documentation', path: '~/projects/api-docs',
     lastOpened: Date.now() - 604800000, missionsRun: 12, status: 'completed',
-    agents: ['coder', 'tester'], starred: true,
-  },
+    agents: ['coder', 'tester'], starred: true },
 ];
 
 const AGENT_EMOJI: Record<string, string> = {
   manager: '👑', coder: '💻', designer: '🎨',
-  marketer: '📣', researcher: '🔍', tester: '🐛',
-};
+  marketer: '📣', researcher: '🔍', tester: '🐛' };
 
 export default function ProjectManagerPage() {
-  const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>(DEMO_PROJECTS);
   const [showNewForm, setShowNewForm] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
@@ -77,8 +71,7 @@ export default function ProjectManagerPage() {
       missionsRun: 0,
       status: 'active',
       agents: ['manager'],
-      starred: false,
-    };
+      starred: false };
     setProjects((prev) => [project, ...prev]);
     setNewProjectName('');
     setShowNewForm(false);
@@ -94,43 +87,41 @@ export default function ProjectManagerPage() {
   const statusConfig = {
     active: { color: '#10B981', label: 'Active' },
     paused: { color: '#F59E0B', label: 'Paused' },
-    completed: { color: '#6366F1', label: 'Done' },
-  };
+    completed: { color: '#6366F1', label: 'Done' } };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="p-1.5 rounded-lg hover:bg-glass transition-colors">
-            <ArrowLeft className="w-4 h-4 text-text-muted" />
+      <PageHeader
+        title="Project Manager"
+        subtitle="Manage your workspaces"
+        icon={FolderOpen}
+        iconColor="#10B981"
+        badge={`${projects.length} projects`}
+        actions={
+          <button
+            onClick={() => setShowNewForm(!showNewForm)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-agent-marketer/10 text-agent-marketer text-xs hover:bg-agent-marketer/20 transition-colors border border-agent-marketer/20"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            New Project
           </button>
-          <FolderOpen className="w-5 h-5 text-agent-marketer" />
-          <h1 className="text-sm font-semibold">Project Manager</h1>
-          <span className="text-xs text-text-muted font-mono ml-2">{projects.length} projects</span>
-        </div>
-        <button
-          onClick={() => setShowNewForm(!showNewForm)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-agent-marketer/10 text-agent-marketer text-xs hover:bg-agent-marketer/20 transition-colors"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          New Project
-        </button>
-      </div>
+        }
+      />
 
       {/* Filter tabs */}
-      <div className="flex items-center gap-1 px-5 py-2 border-b border-glass-border">
-        {(['all', 'active', 'starred'] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-xs transition-colors capitalize ${
-              filter === f ? 'bg-glass text-white' : 'text-text-muted hover:text-white'
-            }`}
-          >
-            {f === 'starred' ? '⭐ Starred' : f === 'all' ? `All (${projects.length})` : f}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 px-5 py-2.5">
+        <div className="tab-pills">
+          {(['all', 'active', 'starred'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`tab-pill capitalize ${filter === f ? 'active' : ''}`}
+            >
+              {f === 'starred' ? '⭐ Starred' : f === 'all' ? `All (${projects.length})` : f}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-5">
@@ -168,15 +159,16 @@ export default function ProjectManagerPage() {
         {/* Project list */}
         <div className="space-y-2">
           <AnimatePresence>
-            {filteredProjects.map((project) => {
+            {filteredProjects.map((project, idx) => {
               const sc = statusConfig[project.status];
               return (
                 <motion.div
                   key={project.id}
                   layout
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ delay: idx * 0.06 }}
                 >
                   <GlassPanel hover className="p-4 cursor-pointer group">
                     <div className="flex items-start gap-4">
@@ -254,5 +246,6 @@ export default function ProjectManagerPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

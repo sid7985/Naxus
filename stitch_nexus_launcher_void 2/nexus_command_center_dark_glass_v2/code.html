@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS Command Center</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter and JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            nexus: {
+              black: '#0A0A0F',
+              input: '#050505',
+              violet: '#7C3AED',
+              cyan: '#06B6D4',
+              amber: '#F59E0B',
+              emerald: '#10B981',
+              border: 'rgba(255,255,255,0.1)',
+              glass: 'rgba(255,255,255,0.04)',
+              sidebar: 'rgba(255,255,255,0.03)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="global-styles">
+    body {
+      background-color: #0A0A0F;
+      color: white;
+      overflow: hidden;
+    }
+    .glass-blur {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Custom Focus Glow for Input */
+    .command-input:focus {
+      outline: none;
+      border-color: #7C3AED;
+      box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased text-white">
+<!-- BEGIN: MainLayout -->
+<main class="flex h-screen w-full overflow-hidden">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-72 bg-nexus-sidebar border-r border-nexus-border flex flex-col" data-purpose="navigation-sidebar" id="sidebar">
+<div class="p-6 border-b border-nexus-border">
+<h1 class="text-xl font-bold tracking-tight flex items-center gap-2">
+<div class="w-2 h-6 bg-nexus-violet rounded-full"></div>
+          NEXUS <span class="font-light opacity-60">OS</span>
+</h1>
+</div>
+<nav class="flex-1 p-4 space-y-6 overflow-y-auto scrollbar-hide">
+<!-- Agent Group -->
+<section>
+<p class="text-[10px] uppercase tracking-widest text-white/40 mb-4 px-2">Active Agents</p>
+<ul class="space-y-2">
+<!-- Primary Coordinator -->
+<li class="flex items-center justify-between p-3 rounded-lg bg-white/5 cursor-pointer border border-white/5">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-nexus-emerald"></div>
+<span class="text-sm font-medium text-nexus-violet">Primary Coordinator</span>
+</div>
+<span class="text-[10px] text-white/40">v2.4</span>
+</li>
+<!-- Data Synthesizer -->
+<li class="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-nexus-emerald"></div>
+<span class="text-sm font-medium text-nexus-cyan">Data Synthesizer</span>
+</div>
+<span class="text-[10px] text-white/20 group-hover:text-white/40">IDLE</span>
+</li>
+<!-- Log Monitor -->
+<li class="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-nexus-emerald"></div>
+<span class="text-sm font-medium text-nexus-amber">Log Monitor</span>
+</div>
+<span class="text-[10px] text-white/20 group-hover:text-white/40">SCANNING</span>
+</li>
+</ul>
+</section>
+<!-- Command History -->
+<section>
+<p class="text-[10px] uppercase tracking-widest text-white/40 mb-4 px-2">Session History</p>
+<ul class="space-y-3 px-2">
+<li class="text-xs text-white/60 hover:text-white cursor-pointer truncate">Query system architecture</li>
+<li class="text-xs text-white/60 hover:text-white cursor-pointer truncate">Initialize data relay A-1</li>
+<li class="text-xs text-white/60 hover:text-white cursor-pointer truncate">Analyze anomaly in Sector 7</li>
+</ul>
+</section>
+</nav>
+<div class="p-4 border-t border-nexus-border">
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-nexus-violet to-nexus-cyan opacity-80"></div>
+<div>
+<p class="text-xs font-semibold">ROOT_USER</p>
+<p class="text-[10px] text-white/40">Secure Connection</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MiddlePanel (Chat Feed) -->
+<section class="flex-1 flex flex-col bg-nexus-black relative" data-purpose="chat-interface" id="chat-feed">
+<!-- Header -->
+<header class="h-16 border-b border-nexus-border flex items-center justify-between px-8">
+<div class="flex items-center gap-4">
+<span class="text-sm font-mono text-nexus-violet"># TERMINAL_SESSION_01</span>
+<span class="text-[10px] px-2 py-0.5 rounded border border-nexus-violet/30 text-nexus-violet">ENCRYPTED</span>
+</div>
+<div class="text-xs text-white/40 font-mono">
+          UPTIME: 142:12:09
+        </div>
+</header>
+<!-- Message Area -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8 scrollbar-hide" data-purpose="messages-container">
+<!-- Coordinator Message -->
+<article class="flex flex-col items-start gap-3">
+<div class="flex items-center gap-2 text-[10px] font-bold text-nexus-violet uppercase tracking-tighter">
+            [ Primary Coordinator ] <span class="opacity-40 font-normal">14:20:01</span>
+</div>
+<div class="max-w-[85%] bg-nexus-glass border border-nexus-border glass-blur p-4 rounded-xl text-sm leading-relaxed">
+            Neural pathways initialized. All systems reporting nominal status. I have finalized the cross-referencing of the inbound telemetry data from the Orion cluster.
+          </div>
+</article>
+<!-- User Message -->
+<article class="flex flex-col items-end gap-3">
+<div class="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-tighter">
+             14:21:45 <span class="text-white/60">[ User ]</span>
+</div>
+<div class="max-w-[85%] bg-white/5 border border-white/10 p-4 rounded-xl text-sm leading-relaxed text-white/90">
+            Show me the specific code structure for the anomaly filter you implemented.
+          </div>
+</article>
+<!-- Code Block Message -->
+<article class="flex flex-col items-start gap-3">
+<div class="flex items-center gap-2 text-[10px] font-bold text-nexus-cyan uppercase tracking-tighter">
+            [ Data Synthesizer ] <span class="opacity-40 font-normal">14:22:10</span>
+</div>
+<div class="max-w-[95%] w-full bg-nexus-glass border border-nexus-border glass-blur p-4 rounded-xl">
+<p class="text-sm mb-4">Filtering logic generated based on the latest packet signature:</p>
+<div class="bg-black border border-nexus-violet p-4 rounded font-mono text-sm overflow-x-auto" data-purpose="code-display">
+<span class="text-nexus-violet">async function</span> <span class="text-nexus-cyan">filterAnomaly</span>(packet) {<br/>
+                <span class="text-white/40">// Validate signature hash</span><br/>
+                <span class="text-nexus-amber">const</span> isValid = <span class="text-nexus-violet">await</span> verify(packet.hash);<br/>
+<br/>
+                <span class="text-nexus-violet">if</span> (!isValid) {<br/>
+                  <span class="text-nexus-violet">return</span> <span class="text-nexus-amber">null</span>;<br/>
+                }<br/>
+                <span class="text-nexus-violet">return</span> process(packet.payload);<br/>
+              }
+            </div>
+</div>
+</article>
+</div>
+<!-- Input Area -->
+<footer class="p-8 pt-0">
+<div class="relative group">
+<input class="command-input w-full bg-nexus-input border border-nexus-border rounded-xl py-4 pl-6 pr-16 text-sm transition-all duration-300 placeholder:text-white/20 font-mono" data-purpose="user-command-input" placeholder="Execute command or message agents..." type="text"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+<kbd class="text-[10px] px-1.5 py-0.5 rounded bg-white/10 border border-white/20 text-white/40">CMD</kbd>
+<kbd class="text-[10px] px-1.5 py-0.5 rounded bg-white/10 border border-white/20 text-white/40">ENTER</kbd>
+</div>
+</div>
+<p class="mt-2 text-[10px] text-white/20 text-center font-mono">SECURE UPLINK ESTABLISHED // NEXUS PROTOCOL v4.0.2</p>
+</footer>
+</section>
+<!-- END: MiddlePanel -->
+<!-- BEGIN: RightTelemetryRail -->
+<aside class="w-80 bg-nexus-black border-l border-nexus-border flex flex-col p-6 space-y-6 overflow-y-auto scrollbar-hide" data-purpose="system-monitoring" id="telemetry-rail">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-[10px] uppercase tracking-widest font-bold text-white/60">System Telemetry</h2>
+<span class="flex h-2 w-2 rounded-full bg-nexus-emerald animate-pulse"></span>
+</div>
+<!-- CPU Metric -->
+<div class="bg-nexus-glass border border-nexus-border p-4 rounded-xl space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-white/60 uppercase">Neural Load</span>
+<span class="text-xs font-mono text-nexus-violet">42.8%</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-nexus-violet" style="width: 42.8%"></div>
+</div>
+<div class="flex gap-1 h-8 items-end">
+<div class="flex-1 bg-nexus-violet/20 h-4"></div>
+<div class="flex-1 bg-nexus-violet/30 h-6"></div>
+<div class="flex-1 bg-nexus-violet/20 h-3"></div>
+<div class="flex-1 bg-nexus-violet/40 h-7"></div>
+<div class="flex-1 bg-nexus-violet/50 h-5"></div>
+<div class="flex-1 bg-nexus-violet/30 h-8"></div>
+</div>
+</div>
+<!-- Memory Metric -->
+<div class="bg-nexus-glass border border-nexus-border p-4 rounded-xl space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-white/60 uppercase">Synthesis Memory</span>
+<span class="text-xs font-mono text-nexus-cyan">18.2 GB</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-nexus-cyan" style="width: 65%"></div>
+</div>
+</div>
+<!-- Network Log (Amber) -->
+<div class="bg-nexus-glass border border-nexus-border p-4 rounded-xl flex-1 flex flex-col">
+<span class="text-[10px] text-white/60 uppercase mb-4">Traffic Analyzer</span>
+<div class="space-y-3 flex-1 font-mono">
+<div class="flex items-start gap-2">
+<div class="w-1 h-1 rounded-full bg-nexus-amber mt-1.5"></div>
+<div class="text-[10px]">
+<p class="text-nexus-amber">Inbound Packet #942</p>
+<p class="text-white/30 text-[9px]">Src: 192.x.x.x | Size: 14KB</p>
+</div>
+</div>
+<div class="flex items-start gap-2">
+<div class="w-1 h-1 rounded-full bg-nexus-amber mt-1.5"></div>
+<div class="text-[10px]">
+<p class="text-nexus-amber">Auth Handshake</p>
+<p class="text-white/30 text-[9px]">Success | Node: US-EAST-1</p>
+</div>
+</div>
+<div class="flex items-start gap-2">
+<div class="w-1 h-1 rounded-full bg-white/20 mt-1.5"></div>
+<div class="text-[10px]">
+<p class="text-white/40">Dormant Listener</p>
+<p class="text-white/30 text-[9px]">Port: 8080 | Protocol: TCP</p>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-white/5 flex justify-center">
+<div class="w-full h-12 bg-nexus-amber/10 rounded flex items-center justify-center">
+<span class="text-[10px] text-nexus-amber font-mono animate-pulse">--- SCANNING PULSE ---</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: RightTelemetryRail -->
+</main>
+<!-- END: MainLayout -->
+<script data-purpose="canvas-bg-effect">
+    /**
+     * Optional subtle background animation could be added here.
+     * For now, the static deep space aesthetic is handled via Tailwind and CSS.
+     */
+  </script>
+</body></html>

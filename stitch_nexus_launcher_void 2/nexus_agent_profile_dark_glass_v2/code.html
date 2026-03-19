@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agent Profile - Agent Alpha</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="global-styles">
+    body {
+      background-color: #0A0A0F;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .violet-glow {
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+  </style>
+<style data-purpose="personality-sliders">
+    input[type='range'] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #1A1A1A;
+      height: 4px;
+      border-radius: 2px;
+    }
+    input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
+    }
+    /* Simple CSS trick for violet track using a linear gradient background sizing is complex, 
+       so we use a standard track style for consistency */
+    .track-violet {
+      background: linear-gradient(to right, #7C3AED var(--val), #1A1A1A var(--val));
+    }
+  </style>
+</head>
+<body class="h-screen w-full flex overflow-hidden">
+<!-- BEGIN: LeftPanel -->
+<aside class="glass-panel w-[340px] h-full flex flex-col p-8 z-10" data-purpose="identity-and-settings" id="sidebar">
+<!-- Identity Section -->
+<section class="flex flex-col items-center mb-10" data-purpose="agent-identity">
+<div class="relative mb-6">
+<div class="w-[80px] h-[80px] rounded-full violet-glow border-2 border-[#7C3AED] overflow-hidden flex items-center justify-center bg-[#111111]">
+<!-- Agent Avatar Placeholder -->
+<img alt="Agent Alpha" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZs3YruQQOuEMvzRFq1Z8ninePPHhFwyeKQn-Uo91h_6mGLdindT7Ibi8U0RDgqFhHSjWrHSLqVzIPu3eK2tGQRHdVud74JTViUkbBRs4Me4kd7wiaosSUCb-y7RVoS2B4ORZ3l7zWDoPnAa4RO385PSqXUrLiweumCYHb3oYCC1LvIUptfS9j3WMSx1srcGB6ocp1qSFlTfZQdHxPgfSC3GXONyhTFQ-Uc2oz4WvLUNDJ-AwBZg5BoTSe54nF2-W3D7-so3KqwHk"/>
+</div>
+</div>
+<h1 class="text-2xl font-bold text-white mb-2">Agent Alpha</h1>
+<span class="bg-[#7C3AED] text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full">
+        Manager
+      </span>
+</section>
+<!-- Tools Section -->
+<section class="mb-10" data-purpose="agent-tools">
+<h3 class="text-[11px] font-bold text-[#9B9B9B] uppercase tracking-wider mb-4">Core Tools</h3>
+<div class="flex flex-col gap-2">
+<!-- Tool Chip -->
+<div class="flex items-center gap-3 bg-[#111111] border border-[#7C3AED]/30 p-3 rounded-md">
+<div class="w-2 h-2 rounded-full bg-[#7C3AED]"></div>
+<span class="text-sm font-medium">Strategic Planning</span>
+</div>
+<!-- Tool Chip -->
+<div class="flex items-center gap-3 bg-[#111111] border border-[#7C3AED]/30 p-3 rounded-md">
+<div class="w-2 h-2 rounded-full bg-[#7C3AED]"></div>
+<span class="text-sm font-medium">Risk Analysis</span>
+</div>
+<!-- Tool Chip -->
+<div class="flex items-center gap-3 bg-[#111111] border border-[#7C3AED]/30 p-3 rounded-md">
+<div class="w-2 h-2 rounded-full bg-[#7C3AED]"></div>
+<span class="text-sm font-medium">Resource Allocation</span>
+</div>
+</div>
+</section>
+<!-- Personality Section -->
+<section data-purpose="agent-personality">
+<h3 class="text-[11px] font-bold text-[#9B9B9B] uppercase tracking-wider mb-6">Personality</h3>
+<!-- Tone Slider -->
+<div class="mb-6">
+<div class="flex justify-between mb-2">
+<label class="text-xs text-[#9B9B9B]">Tone</label>
+<span class="text-[10px] text-white">Professional</span>
+</div>
+<input class="w-full accent-[#7C3AED]" max="100" min="0" type="range" value="75"/>
+</div>
+<!-- Detail Slider -->
+<div class="mb-6">
+<div class="flex justify-between mb-2">
+<label class="text-xs text-[#9B9B9B]">Detail</label>
+<span class="text-[10px] text-white">Granular</span>
+</div>
+<input class="w-full accent-[#7C3AED]" max="100" min="0" type="range" value="90"/>
+</div>
+</section>
+<!-- Footer Stats -->
+<div class="mt-auto pt-6 border-t border-white/10">
+<div class="flex justify-between text-[11px] text-[#9B9B9B]">
+<span>Status</span>
+<span class="text-green-500 uppercase font-bold">Active</span>
+</div>
+</div>
+</aside>
+<!-- END: LeftPanel -->
+<!-- BEGIN: RightPanel (Chat) -->
+<main class="flex-1 flex flex-col relative h-full" data-purpose="chat-interface">
+<!-- Chat Header (Optional for Context) -->
+<header class="p-6 border-b border-white/5 flex items-center justify-between">
+<h2 class="text-sm font-semibold text-white/50">Strategic Coordination Channel</h2>
+<div class="text-[10px] text-[#9B9B9B] bg-white/5 px-2 py-1 rounded">ID: ALPHA-001</div>
+</header>
+<!-- Messages Area -->
+<section class="flex-1 overflow-y-auto p-8 flex flex-col gap-6 custom-scrollbar" data-purpose="chat-history">
+<!-- Agent Message -->
+<div class="flex flex-col gap-2 max-w-[80%]">
+<div class="glass-panel p-4 rounded-2xl rounded-tl-none">
+<p class="text-sm leading-relaxed text-white">
+            Protocol initiated. I have analyzed the current market trajectory. We need to reallocate 15% of the compute budget to the R&amp;D shard immediately.
+          </p>
+</div>
+<span class="text-[10px] text-[#9B9B9B] ml-2">Agent Alpha • 09:41 AM</span>
+</div>
+<!-- User Message -->
+<div class="flex flex-col gap-2 max-w-[80%] self-end">
+<div class="bg-[#1A1A1A] border border-white/10 ring-1 ring-[#7C3AED]/20 p-4 rounded-2xl rounded-tr-none">
+<p class="text-sm leading-relaxed text-white">
+            Confirmed. What is the estimated impact on the Q3 roadmap if we execute this shift today?
+          </p>
+</div>
+<span class="text-[10px] text-[#9B9B9B] mr-2 text-right">You • 09:42 AM</span>
+</div>
+<!-- Agent Message -->
+<div class="flex flex-col gap-2 max-w-[80%]">
+<div class="glass-panel p-4 rounded-2xl rounded-tl-none">
+<p class="text-sm leading-relaxed text-white">
+            The shift will accelerate the Neural Core update by 12 days. Minimal impact on secondary deliverables. I recommend proceeding with the migration within the next 4 hours to avoid peak latency.
+          </p>
+</div>
+<span class="text-[10px] text-[#9B9B9B] ml-2">Agent Alpha • 09:43 AM</span>
+</div>
+</section>
+<!-- Input Bar -->
+<footer class="p-8 pt-4" data-purpose="chat-input-container">
+<div class="relative group">
+<div class="absolute -inset-0.5 bg-[#7C3AED] rounded-lg blur opacity-0 group-focus-within:opacity-20 transition duration-300"></div>
+<div class="relative flex items-center bg-[#111111] border border-white/10 rounded-lg overflow-hidden transition-all duration-300 group-focus-within:border-[#7C3AED]/50">
+<input class="w-full bg-transparent border-none text-sm text-white py-4 px-6 focus:ring-0 placeholder-[#444444]" placeholder="Direct message Agent Alpha..." type="text"/>
+<button class="px-6 py-4 text-[#7C3AED] hover:text-white transition-colors">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="22" x2="11" y1="2" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+</button>
+</div>
+</div>
+<p class="text-[10px] text-center text-[#444444] mt-4">Command mode active. Type /help for manager directives.</p>
+</footer>
+</main>
+<!-- END: RightPanel (Chat) -->
+<script data-purpose="input-interaction">
+    // Subtle focus handling for the input bar glow
+    const inputElement = document.querySelector('input[type="text"]');
+    const inputContainer = inputElement.closest('.group');
+    
+    inputElement.addEventListener('focus', () => {
+      // Logic for focus if needed beyond CSS
+    });
+  </script>
+</body></html>

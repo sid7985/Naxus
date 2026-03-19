@@ -7,7 +7,9 @@ import {
   BarChart3, Plus, Settings, Zap, Activity, Plug, Mic
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import NeonIcon from '../components/ui/NeonIcon';
 import StatusBadge from '../components/ui/StatusBadge';
+import SpatialSidebar from '../components/layout/SpatialSidebar';
 import { useAgentStore } from '../stores/agentStore';
 import { useSettingsStore } from '../stores/settingsStore';
 import { useMemoryStore } from '../stores/memoryStore';
@@ -17,6 +19,7 @@ import { APP_NAME } from '../lib/constants';
 import { formatTimestamp } from '../lib/utils';
 import OfficeSimulator from '../components/ide/OfficeSimulator';
 import NotepadWidget from '../components/os/NotepadWidget';
+import PageTransition from '../components/layout/PageTransition';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Crown, Code2, Palette, Megaphone, Bug, Search,
@@ -131,7 +134,8 @@ export default function CommandCenterPage() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col relative">
+    <PageTransition>
+    <div className="h-full w-full flex flex-col relative nebula-bg">
       <AnimatePresence>
         {showNotepad && <NotepadWidget onClose={() => setShowNotepad(false)} />}
       </AnimatePresence>
@@ -173,32 +177,30 @@ export default function CommandCenterPage() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* --- Left Sidebar: Agent Team --- */}
-        <div className={`w-60 border-r border-glass-border flex flex-col p-3 gap-2 overflow-y-auto shrink-0 transition-colors duration-500 ${liquidGlassEnabled ? 'bg-black/30 backdrop-blur-3xl border-r-white/10' : 'bg-void'}`}>
+        <SpatialSidebar position="left" width="w-60">
           <div className="text-[10px] uppercase tracking-widest text-text-muted font-mono mb-1 px-1">
             Active Agents
           </div>
-          {agents.map((agent) => {
+          {agents.map((agent, idx) => {
             const IconComponent = ICON_MAP[agent.icon];
             return (
               <motion.button
                 key={agent.id}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.08, type: 'spring', stiffness: 300, damping: 24 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(`/agent/${agent.id}`)}
                 className="w-full"
               >
                 <GlassPanel hover className="p-3 flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-                    style={{
-                      background: `${agent.color}15`,
-                      border: `1px solid ${agent.color}30`,
-                      boxShadow: agent.status === 'thinking' ? `0 0 12px ${agent.color}40` : 'none',
-                    }}
-                  >
-                    {IconComponent && (
-                      <IconComponent className="w-4 h-4" style={{ color: agent.color }} />
-                    )}
+                  <div className={agent.status === 'idle' ? 'animate-pulse-agent' : agent.status === 'thinking' ? 'animate-thought-pulse' : ''}>
+                  <NeonIcon
+                    icon={IconComponent || Crown}
+                    color={agent.color}
+                    size="sm"
+                  />
                   </div>
                   <div className="flex-1 text-left min-w-0">
                     <div className="text-sm font-medium truncate" style={{ color: agent.color }}>
@@ -272,7 +274,7 @@ export default function CommandCenterPage() {
                Voice Control
              </button>
            </div>
-         </div>
+          </SpatialSidebar>
 
         {/* --- Center: Mission Feed --- */}
         <div className={`flex-1 flex flex-col min-w-0 transition-colors duration-500 ${liquidGlassEnabled ? 'bg-void' : ''}`}>
@@ -360,8 +362,8 @@ export default function CommandCenterPage() {
           </div>
 
           {/* Command bar */}
-          <div className="px-4 py-3 border-t border-glass-border">
-            <GlassPanel className="flex items-center gap-2 px-4 py-1">
+          <div className="px-4 py-3">
+            <GlassPanel elevated className="flex items-center gap-2 px-4 py-1">
               <input
                 type="text"
                 value={input}
@@ -397,7 +399,7 @@ export default function CommandCenterPage() {
         </div>
 
         {/* --- Right Rail: Context Panel --- */}
-        <div className={`w-72 border-l border-glass-border flex flex-col shrink-0 transition-colors duration-500 ${liquidGlassEnabled ? 'bg-black/30 backdrop-blur-3xl border-l-white/10' : 'bg-void'}`}>
+        <SpatialSidebar position="right" width="w-72">
           {/* Tabs */}
           <div className="flex border-b border-glass-border">
             {(['files', 'memory', 'web', 'metrics'] as const).map((tab) => {
@@ -490,9 +492,9 @@ export default function CommandCenterPage() {
                       <GlassPanel key={mem.id} className="p-3 relative group">
                         <div className="flex items-start gap-2">
                           <div className={`w-1 self-stretch rounded-full shrink-0 ${
-                            mem.layer === 'core' ? 'bg-[#7C3AED]' : 
-                            mem.layer === 'project' ? 'bg-[#06B6D4]' : 
-                            'bg-[#10B981]'
+                            mem.layer === 'core' ? 'bg-agent-manager' : 
+                            mem.layer === 'project' ? 'bg-agent-coder' : 
+                            'bg-agent-marketer'
                           }`} />
                           <div className="flex-1 min-w-0">
                             <p className="text-xs text-text-secondary leading-relaxed line-clamp-3">
@@ -544,8 +546,9 @@ export default function CommandCenterPage() {
               </div>
             </div>
           </div>
-        </div>
+        </SpatialSidebar>
       </div>
     </div>
+    </PageTransition>
   );
 }

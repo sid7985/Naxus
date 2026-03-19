@@ -6,10 +6,12 @@ import {
   Clock, Star, Database, Layers, Filter, RefreshCw
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import SpatialSidebar from '../components/layout/SpatialSidebar';
 import { useMemoryStore } from '../stores/memoryStore';
 import { useSettingsStore } from '../stores/settingsStore';
 import { memoryService } from '../services/memory';
 import { DEFAULT_AGENTS } from '../lib/constants';
+import PageTransition from '../components/layout/PageTransition';
 
 const LAYER_CONFIG = {
   core:     { label: 'Core Facts',      color: '#7C3AED', icon: Star,     desc: 'Permanent, user-only edit' },
@@ -67,6 +69,7 @@ export default function MemoryPage() {
   };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
@@ -99,7 +102,7 @@ export default function MemoryPage() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Layer Filter */}
-        <div className="w-52 border-r border-glass-border p-3 space-y-1 shrink-0">
+        <SpatialSidebar position="left" width="w-52" className="p-3 space-y-1">
           <div className="text-[10px] uppercase tracking-widest text-text-muted font-mono mb-2 px-1">
             Memory Layers
           </div>
@@ -145,7 +148,7 @@ export default function MemoryPage() {
               </div>
             )}
           </div>
-        </div>
+        </SpatialSidebar>
 
         {/* Right: Memory Cards */}
         <div className="flex-1 flex flex-col min-w-0">
@@ -288,5 +291,6 @@ export default function MemoryPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

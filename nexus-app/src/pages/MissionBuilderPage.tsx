@@ -11,6 +11,7 @@ import { useSettingsStore } from '../stores/settingsStore';
 import { ollama } from '../services/ollama';
 import { DEFAULT_AGENTS } from '../lib/constants';
 import type { AgentRole } from '../lib/types';
+import PageTransition from '../components/layout/PageTransition';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Crown, Code2, Palette, Megaphone, Bug, Search,
@@ -85,6 +86,7 @@ export default function MissionBuilderPage() {
   };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col overflow-y-auto">
       {/* Header */}
       <div className="px-6 py-4 border-b border-glass-border flex items-center gap-3">
@@ -234,5 +236,6 @@ export default function MissionBuilderPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

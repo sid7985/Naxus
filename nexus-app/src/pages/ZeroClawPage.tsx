@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, MousePointer2, Shield, Eye, Camera, Command, AlertTriangle, MonitorPlay } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
 import { clawService, SafetyTier } from '../services/clawService';
+import PageTransition from '../components/layout/PageTransition';
 
 export default function ZeroClawPage() {
   const navigate = useNavigate();
@@ -102,6 +103,7 @@ export default function ZeroClawPage() {
   };
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
@@ -283,5 +285,6 @@ export default function ZeroClawPage() {
 
       </div>
     </div>
+    </PageTransition>
   );
 }

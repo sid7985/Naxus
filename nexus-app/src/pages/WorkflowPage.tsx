@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ArrowLeft, Workflow, Play, Plus, Save,
+import { Workflow, Play, Plus, Save,
   Share2, Zap, Users
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageHeader from '../components/layout/PageHeader';
+import PageTransition from '../components/layout/PageTransition';
 
 interface WorkflowTemplate {
   id: string;
@@ -31,46 +31,44 @@ const TEMPLATES: WorkflowTemplate[] = [
 
 const AGENT_COLORS: Record<string, string> = {
   manager: '#7C3AED', coder: '#06B6D4', designer: '#F59E0B',
-  marketer: '#10B981', researcher: '#6366F1', tester: '#F43F5E',
-};
+  marketer: '#10B981', researcher: '#6366F1', tester: '#F43F5E' };
 
 export default function WorkflowPage() {
-  const navigate = useNavigate();
   const [filter, setFilter] = useState<'all' | 'productivity' | 'dev' | 'content' | 'research'>('all');
   const [selectedWorkflow, setSelectedWorkflow] = useState<WorkflowTemplate | null>(null);
 
   const filtered = TEMPLATES.filter((w) => filter === 'all' || w.category === filter);
 
   return (
+    <PageTransition>
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between px-5 py-3 border-b border-glass-border">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/')} className="p-1.5 rounded-lg hover:bg-glass transition-colors">
-            <ArrowLeft className="w-4 h-4 text-text-muted" />
+      <PageHeader
+        title="Workflows & Skills"
+        subtitle="Multi-agent automation templates"
+        icon={Workflow}
+        iconColor="#10B981"
+        badge={`${TEMPLATES.length} templates`}
+        actions={
+          <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-agent-marketer/10 text-agent-marketer text-xs hover:bg-agent-marketer/20 transition-colors border border-agent-marketer/20">
+            <Plus className="w-3.5 h-3.5" />
+            New Workflow
           </button>
-          <Workflow className="w-5 h-5 text-agent-marketer" />
-          <h1 className="text-sm font-semibold">Workflows & Skills</h1>
-          <span className="text-xs text-text-muted font-mono ml-2">{TEMPLATES.length} templates</span>
-        </div>
-        <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-agent-marketer/10 text-agent-marketer text-xs hover:bg-agent-marketer/20 transition-colors">
-          <Plus className="w-3.5 h-3.5" />
-          New Workflow
-        </button>
-      </div>
+        }
+      />
 
       {/* Category filter */}
-      <div className="flex items-center gap-1 px-5 py-2 border-b border-glass-border">
-        {(['all', 'productivity', 'dev', 'content', 'research'] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-xs transition-colors capitalize ${
-              filter === f ? 'bg-glass text-white' : 'text-text-muted hover:text-white'
-            }`}
-          >
-            {f}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 px-5 py-2.5">
+        <div className="tab-pills">
+          {(['all', 'productivity', 'dev', 'content', 'research'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`tab-pill capitalize ${filter === f ? 'active' : ''}`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
@@ -115,7 +113,7 @@ export default function WorkflowPage() {
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: 320, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
-              className="border-l border-glass-border overflow-hidden shrink-0"
+              className="spatial-detail-panel shrink-0"
             >
               <div className="w-80 p-4 space-y-4">
                 <div className="text-center">
@@ -161,5 +159,6 @@ export default function WorkflowPage() {
         </AnimatePresence>
       </div>
     </div>
+    </PageTransition>
   );
 }

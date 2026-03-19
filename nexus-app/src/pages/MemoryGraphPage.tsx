@@ -17,6 +17,7 @@ import { useMemoryStore } from '../stores/memoryStore';
 import { useAgentStore } from '../stores/agentStore';
 import GlassPanel from '../components/ui/GlassPanel';
 import { formatTimestamp } from '../lib/utils';
+import PageTransition from '../components/layout/PageTransition';
 
 // We map Memory layers to node styles
 const LAYER_COLORS = {
@@ -42,9 +43,9 @@ export default function MemoryGraphPage() {
       position: { x: window.innerWidth / 2 - 100, y: 150 },
       data: { label: 'NEXUS Knowledge Base' },
       style: {
-        background: '#111',
+        background: '#12121A',
         color: '#fff',
-        border: '1px solid #333',
+        border: '1px solid rgba(255,255,255,0.1)',
         borderRadius: '8px',
         padding: '12px',
         fontWeight: 'bold',
@@ -129,7 +130,8 @@ export default function MemoryGraphPage() {
   }, []);
 
   return (
-    <div className="h-full w-full flex flex-col relative overflow-hidden bg-[#0e0e0e]">
+    <PageTransition>
+    <div className="h-full w-full flex flex-col relative overflow-hidden bg-void">
       {/* Top Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-glass-border bg-void-light/50 sticky top-0 z-50 backdrop-blur-md">
         <div className="flex items-center gap-3">
@@ -160,7 +162,7 @@ export default function MemoryGraphPage() {
           maxZoom={4}
           proOptions={{ hideAttribution: true }}
         >
-          <Background color="#333" gap={20} size={1} />
+          <Background color="rgba(255,255,255,0.08)" gap={20} size={1} />
           <Controls 
             className="bg-glass border border-glass-border fill-white text-white rounded-lg overflow-hidden shadow-2xl" 
             showInteractive={false} 
@@ -229,5 +231,6 @@ export default function MemoryGraphPage() {
         )}
       </div>
     </div>
+    </PageTransition>
   );
 }

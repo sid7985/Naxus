@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle2, Circle, Plus, Trash2, Cpu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import GlassPanel from '../components/ui/GlassPanel';
+import PageTransition from '../components/layout/PageTransition';
 
 interface Todo {
   id: string;
@@ -50,6 +51,7 @@ export default function QuickTodoPage() {
   const completedCount = todos.filter(t => t.completed).length;
 
   return (
+    <PageTransition>
     <div className="h-full w-full flex flex-col bg-void overflow-hidden">
       {/* Top Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-glass-border bg-void-light/50 sticky top-0 z-50 backdrop-blur-md">
@@ -138,5 +140,6 @@ export default function QuickTodoPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }
