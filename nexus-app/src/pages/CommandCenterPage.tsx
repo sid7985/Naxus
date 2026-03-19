@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Crown, Code2, Palette, Megaphone, Bug, Search,
-  Send, Sparkles, Globe, FolderOpen, Brain,
+  Send, Sparkles, Globe, FolderOpen, Brain, Edit3,
   BarChart3, Plus, Settings, Zap, Activity, Plug, Mic
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
@@ -16,6 +16,7 @@ import { orchestrator } from '../services/orchestrator';
 import { APP_NAME } from '../lib/constants';
 import { formatTimestamp } from '../lib/utils';
 import OfficeSimulator from '../components/ide/OfficeSimulator';
+import NotepadWidget from '../components/os/NotepadWidget';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Crown, Code2, Palette, Megaphone, Bug, Search,
@@ -34,6 +35,7 @@ export default function CommandCenterPage() {
   const [input, setInput] = useState('');
   const [activeContextTab, setActiveContextTab] = useState<string>('files');
   const [isStreaming, setIsStreaming] = useState(false);
+  const [showNotepad, setShowNotepad] = useState(false);
   const feedEndRef = useRef<HTMLDivElement>(null);
 
   const agents = useAgentStore((s) => s.agents);
@@ -129,7 +131,10 @@ export default function CommandCenterPage() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col">
+    <div className="h-full w-full flex flex-col relative">
+      <AnimatePresence>
+        {showNotepad && <NotepadWidget onClose={() => setShowNotepad(false)} />}
+      </AnimatePresence>
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-glass-border">
         <div className="flex items-center gap-3">
@@ -251,6 +256,13 @@ export default function CommandCenterPage() {
              >
                <Plug className="w-3.5 h-3.5" />
                Integrations Hub
+             </button>
+             <button
+               onClick={() => setShowNotepad(!showNotepad)}
+               className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-yellow-400 hover:bg-glass transition-colors border border-yellow-400/20 bg-yellow-400/5 mt-2"
+             >
+               <Edit3 className="w-3.5 h-3.5" />
+               OS Notepad
              </button>
              <button
                onClick={() => navigate('/voice')}

@@ -12,7 +12,8 @@ const AGENT_COLORS = {
 };
 
 export default function OfficeSimulator() {
-  const agents = useRpgStore(s => Object.values(s.agents));
+  const agentsMap = useRpgStore(s => s.agents);
+  const agents = Object.values(agentsMap);
 
   return (
     <div className="w-full h-full relative overflow-hidden bg-void border border-glass-border rounded-xl shadow-2xl shrink-0 group">
