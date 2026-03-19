@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS Agent Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#ec5b13",
+                "background-light": "#f8f6f6",
+                "background-dark": "#221610",
+                "neutral-paper": "#FFFFFF",
+                "neutral-border": "#E4E4E7",
+                "neutral-text": "#0A0A0A",
+                "secondary-text": "#9B9B9B",
+                "skill-bg": "#F4F4F5",
+                "thumb-dark": "#09090B"
+              },
+              fontFamily: {
+                "display": ["Public Sans", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #09090B;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider-thumb::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            background: #09090B;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-neutral-text antialiased">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-neutral-border bg-neutral-paper px-8 py-4">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary font-bold text-[20px]">
+                    N
+                </div>
+<div class="flex flex-col">
+<h1 class="text-[18px] font-semibold text-neutral-text leading-tight">NEXUS Agent</h1>
+<span class="text-[12px] text-secondary-text uppercase tracking-wider font-medium">Core Intelligence v2.0</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center p-2 rounded-lg hover:bg-skill-bg text-secondary-text transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+<button class="flex items-center justify-center p-2 rounded-lg hover:bg-skill-bg text-secondary-text transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-neutral-border mx-2"></div>
+<div class="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary text-sm">person</span>
+</div>
+</div>
+</header>
+<main class="flex flex-1 gap-6 p-6 overflow-hidden">
+<!-- LEFT: Chat Interface -->
+<section class="flex flex-1 flex-col rounded-xl border border-neutral-border bg-neutral-paper shadow-sm">
+<div class="flex items-center justify-between border-b border-neutral-border p-4">
+<div class="flex items-center gap-2">
+<div class="h-2 w-2 rounded-full bg-green-500"></div>
+<span class="text-sm font-medium">Session Active</span>
+</div>
+<span class="text-xs text-secondary-text">Latency: 24ms</span>
+</div>
+<div class="flex flex-1 flex-col gap-6 overflow-y-auto p-6">
+<div class="flex gap-4">
+<div class="h-8 w-8 rounded bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-xs">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1.5">
+<p class="text-xs font-semibold text-secondary-text">NEXUS</p>
+<div class="max-w-[80%] rounded-xl rounded-tl-none bg-skill-bg px-4 py-3 text-sm leading-relaxed text-neutral-text">
+                                Hello. I have successfully initialized my neural processing modules. How can I assist you with your configuration today?
+                            </div>
+</div>
+</div>
+<div class="flex flex-row-reverse gap-4">
+<div class="h-8 w-8 rounded bg-neutral-text flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-xs">person</span>
+</div>
+<div class="flex flex-col items-end gap-1.5">
+<p class="text-xs font-semibold text-secondary-text">USER</p>
+<div class="max-w-[80%] rounded-xl rounded-tr-none bg-primary text-white px-4 py-3 text-sm leading-relaxed">
+                                Adjust the creativity parameters for the research module.
+                            </div>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="h-8 w-8 rounded bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-xs">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1.5">
+<p class="text-xs font-semibold text-secondary-text">NEXUS</p>
+<div class="max-w-[80%] rounded-xl rounded-tl-none bg-skill-bg px-4 py-3 text-sm leading-relaxed text-neutral-text">
+                                Understood. I've updated the temperature threshold. You can see the real-time adjustments in the configuration panel on your right.
+                            </div>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-neutral-border">
+<div class="flex items-center gap-2 rounded-lg border border-neutral-border bg-background-light p-2 focus-within:border-primary transition-colors">
+<input class="flex-1 bg-transparent px-2 text-sm outline-none border-none ring-0 focus:ring-0 text-neutral-text" placeholder="Type a message..." type="text"/>
+<button class="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-text text-white hover:bg-neutral-text/90 transition-colors">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- RIGHT: Config Panel -->
+<aside class="w-[380px] flex flex-col gap-6 overflow-y-auto">
+<!-- Parameters Card -->
+<div class="rounded-xl border border-neutral-border bg-neutral-paper p-6 shadow-sm">
+<div class="mb-6 flex items-center justify-between">
+<h2 class="font-bold text-neutral-text">Parameters</h2>
+<span class="material-symbols-outlined text-secondary-text text-[20px]">tune</span>
+</div>
+<div class="space-y-8">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<label class="text-xs font-semibold text-neutral-text uppercase tracking-wider">Creativity</label>
+<span class="text-xs font-medium text-secondary-text">0.85</span>
+</div>
+<input class="slider-thumb h-1 w-full cursor-pointer appearance-none rounded-lg bg-neutral-border transition-all hover:bg-neutral-border/80" max="100" min="0" type="range" value="85"/>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<label class="text-xs font-semibold text-neutral-text uppercase tracking-wider">Reasoning</label>
+<span class="text-xs font-medium text-secondary-text">0.92</span>
+</div>
+<input class="slider-thumb h-1 w-full cursor-pointer appearance-none rounded-lg bg-neutral-border transition-all hover:bg-neutral-border/80" max="100" min="0" type="range" value="92"/>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<label class="text-xs font-semibold text-neutral-text uppercase tracking-wider">Conciseness</label>
+<span class="text-xs font-medium text-secondary-text">0.40</span>
+</div>
+<input class="slider-thumb h-1 w-full cursor-pointer appearance-none rounded-lg bg-neutral-border transition-all hover:bg-neutral-border/80" max="100" min="0" type="range" value="40"/>
+</div>
+</div>
+</div>
+<!-- Skills & Traits Card -->
+<div class="rounded-xl border border-neutral-border bg-neutral-paper p-6 shadow-sm">
+<div class="mb-6 flex items-center justify-between">
+<h2 class="font-bold text-neutral-text">Skills &amp; Capabilities</h2>
+<span class="material-symbols-outlined text-secondary-text text-[20px]">psychology</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="rounded-lg bg-skill-bg px-3 py-1.5 text-xs font-medium text-neutral-text border border-neutral-border/50">NLP Research</span>
+<span class="rounded-lg bg-skill-bg px-3 py-1.5 text-xs font-medium text-neutral-text border border-neutral-border/50">Data Extraction</span>
+<span class="rounded-lg bg-skill-bg px-3 py-1.5 text-xs font-medium text-neutral-text border border-neutral-border/50">Code Analysis</span>
+<span class="rounded-lg bg-skill-bg px-3 py-1.5 text-xs font-medium text-neutral-text border border-neutral-border/50">Multi-lingual</span>
+<span class="rounded-lg bg-skill-bg px-3 py-1.5 text-xs font-medium text-neutral-text border border-neutral-border/50">Strategic Planning</span>
+<span class="rounded-lg bg-skill-bg px-3 py-1.5 text-xs font-medium text-neutral-text border border-neutral-border/50">Real-time Search</span>
+<button class="rounded-lg border border-dashed border-neutral-border px-3 py-1.5 text-xs font-medium text-secondary-text hover:bg-skill-bg transition-colors">+ Add Skill</button>
+</div>
+</div>
+<!-- System State -->
+<div class="rounded-xl border border-neutral-border bg-neutral-paper p-4 shadow-sm flex items-center gap-4">
+<div class="flex-1">
+<p class="text-xs font-bold text-neutral-text uppercase">Agent Core Status</p>
+<p class="text-xs text-secondary-text">Optimized for paper-light output</p>
+</div>
+<div class="h-10 w-20 bg-background-light rounded border border-neutral-border relative overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-primary/20 w-3/4"></div>
+<div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-primary">75% Load</div>
+</div>
+</div>
+</aside>
+</main>
+<footer class="border-t border-neutral-border bg-neutral-paper px-8 py-4 flex justify-between items-center">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-text text-sm">database</span>
+<span class="text-xs text-secondary-text">Database Sync: Connected</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-text text-sm">security</span>
+<span class="text-xs text-secondary-text">End-to-End Encrypted</span>
+</div>
+</div>
+<p class="text-[10px] text-secondary-text font-mono uppercase tracking-widest">Nexus-AA-8902-Delta</p>
+</footer>
+</div>
+</body></html>

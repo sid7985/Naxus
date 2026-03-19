@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS IDE - ChargeLink</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'void-bg': '#0A0A0A',
+            'void-surface': '#0D0D0D',
+            'void-border': 'rgba(255,255,255,0.07)',
+            'void-text': '#F2F2F2',
+            'void-muted': '#666666',
+            'void-accent': '#3B82F6',
+          },
+          fontFamily: {
+            'mono': ['JetBrains Mono', 'Menlo', 'monospace'],
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="global-resets">
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      background-color: #0A0A0A;
+      color: #F2F2F2;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+    .border-void { border: 1px solid rgba(255,255,255,0.07); }
+    .border-b-void { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .border-r-void { border-right: 1px solid rgba(255,255,255,0.07); }
+    .border-l-void { border-left: 1px solid rgba(255,255,255,0.07); }
+    .border-t-void { border-top: 1px solid rgba(255,255,255,0.07); }
+  </style>
+</head>
+<body class="h-screen flex flex-col">
+<!-- BEGIN: TitleBar -->
+<header class="h-8 bg-void-surface border-b-void flex items-center justify-between px-3 select-none" data-purpose="title-bar">
+<div class="flex items-center gap-4">
+<div class="text-[10px] font-bold tracking-widest text-void-accent">NEXUS</div>
+<div class="text-xs text-void-muted">ChargeLink — <span class="text-void-text">LoginScreen.kt</span></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-void-bg border-void px-2 py-0.5 rounded text-[10px] gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+<span class="text-void-muted">Model:</span>
+<span class="font-mono text-void-text">llama3.2:latest</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-void-muted/20"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-void-muted/20"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-void-muted/20"></div>
+</div>
+</div>
+</header>
+<!-- END: TitleBar -->
+<main class="flex-1 flex overflow-hidden">
+<!-- BEGIN: ActivityBar -->
+<nav class="w-[48px] bg-void-surface border-r-void flex flex-col items-center py-4 gap-6" data-purpose="activity-bar">
+<!-- Icons are simulated with placeholders for the 11 requested tools -->
+<div class="text-void-text opacity-100 cursor-pointer" title="Explorer">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path></svg>
+</div>
+<div class="text-void-muted hover:text-void-text cursor-pointer" title="Search">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+</div>
+<div class="text-void-muted hover:text-void-text cursor-pointer" title="Git">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" x2="6" y1="9" y2="21"></line></svg>
+</div>
+<div class="text-void-muted hover:text-void-text cursor-pointer" title="Agents">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+</div>
+<div class="text-void-muted hover:text-void-text cursor-pointer" title="Memory">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M6 19v-3"></path><path d="M10 19V11"></path><path d="M14 19V5"></path><path d="M18 19v-7"></path></svg>
+</div>
+<div class="text-void-muted hover:text-void-text cursor-pointer" title="Tester">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m10 2 1 1h4l1-1"></path><path d="m10 22 1-1h4l1 1"></path><path d="M20 7.06A10 10 0 1 0 20 17"></path><path d="M12 12v.01"></path></svg>
+</div>
+<div class="mt-auto mb-4 flex flex-col gap-6">
+<div class="text-void-muted hover:text-void-text cursor-pointer" title="Internet">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+</div>
+<div class="text-void-muted hover:text-void-text cursor-pointer" title="Settings">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+</div>
+</div>
+</nav>
+<!-- END: ActivityBar -->
+<!-- BEGIN: Sidebar -->
+<aside class="w-[260px] bg-void-bg border-r-void flex flex-col" data-purpose="file-explorer">
+<div class="h-9 px-4 flex items-center justify-between">
+<span class="text-[10px] uppercase tracking-widest font-bold text-void-muted">Explorer</span>
+<div class="flex gap-2 text-void-muted">
+<svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M11 13H5m11-8h-6a2 2 0 0 0-2 2v10"></path><path d="M20 13h-6"></path></svg>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-2">
+<!-- Root Project -->
+<div class="px-4 py-1 flex items-center gap-2 text-xs font-semibold text-void-text">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          CHARGELINK
+        </div>
+<!-- Folder Structure -->
+<div class="pl-8 py-1 flex items-center gap-2 text-xs text-void-muted hover:text-void-text cursor-pointer">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          src
+        </div>
+<div class="pl-12 py-1 flex items-center gap-2 text-xs text-void-muted hover:text-void-text cursor-pointer">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          ui
+        </div>
+<div class="pl-16 py-1 flex items-center gap-2 text-xs text-void-text bg-void-accent/10 border-r-2 border-void-accent cursor-pointer">
+<svg fill="none" height="12" stroke="#A78BFA" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          LoginScreen.kt
+        </div>
+<div class="pl-16 py-1 flex items-center gap-2 text-xs text-void-muted hover:text-void-text cursor-pointer">
+<svg fill="none" height="12" stroke="#A78BFA" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          MainComponent.kt
+        </div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: MainEditorContainer -->
+<div class="flex-1 flex flex-col relative overflow-hidden" data-purpose="editor-container">
+<!-- Editor Tabs -->
+<div class="h-9 bg-void-surface border-b-void flex items-center overflow-x-auto no-scrollbar">
+<div class="h-full px-4 border-r-void flex items-center gap-2 bg-void-bg text-xs border-t-2 border-t-void-accent">
+<span class="text-void-text">LoginScreen.kt</span>
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</div>
+<div class="h-full px-4 border-r-void flex items-center gap-2 text-void-muted text-xs hover:bg-void-surface/50">
+<span>MainComponent.kt</span>
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</div>
+</div>
+<!-- Breadcrumbs -->
+<div class="h-6 px-4 flex items-center gap-2 text-[10px] text-void-muted border-b-void bg-void-bg">
+<span>src</span> <span class="opacity-50">/</span>
+<span>ui</span> <span class="opacity-50">/</span>
+<span class="text-void-text">LoginScreen.kt</span>
+</div>
+<!-- Code Editor Content -->
+<div class="flex-1 flex font-mono text-xs leading-relaxed overflow-hidden">
+<!-- Line Numbers -->
+<div class="w-12 bg-void-bg border-r-void text-right pr-3 py-4 text-void-muted select-none">
+          1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16
+        </div>
+<!-- Code Content -->
+<div class="flex-1 bg-void-bg p-4 overflow-y-auto whitespace-pre">
+<span class="text-purple-400">package</span> com.chargelink.ui
+
+<span class="text-purple-400">import</span> androidx.compose.runtime.*
+<span class="text-purple-400">import</span> androidx.compose.material.*
+
+<span class="text-blue-400">@Composable</span>
+<span class="text-purple-400">fun</span> <span class="text-yellow-200">LoginScreen</span>() {
+    <span class="text-purple-400">val</span> uiState <span class="text-purple-400">by</span> remember { mutableStateOf(LoginState()) }
+
+    <span class="text-yellow-200">Column</span>(modifier = Modifier.fillMaxSize()) {
+        <span class="text-yellow-200">Text</span>(text = <span class="text-green-300">"Welcome to ChargeLink"</span>)
+        <span class="text-void-muted">// TODO: Implementation of biometric auth flow</span>
+<span class="text-yellow-200">Button</span>(onClick = { <span class="text-void-muted">/* TODO */</span> }) {
+            <span class="text-yellow-200">Text</span>(<span class="text-green-300">"Login"</span>)
+        }
+    }
+}</div>
+</div>
+<!-- BEGIN: BottomPanel -->
+<div class="h-[240px] bg-void-bg border-t-void flex flex-col" data-purpose="terminal-panel">
+<div class="h-8 border-b-void flex items-center px-4 gap-6 bg-void-surface">
+<span class="text-[10px] font-bold text-void-text border-b-2 border-void-accent h-full flex items-center uppercase tracking-wider">Terminal</span>
+<span class="text-[10px] font-bold text-void-muted h-full flex items-center uppercase tracking-wider">Debug Console</span>
+<span class="text-[10px] font-bold text-void-muted h-full flex items-center uppercase tracking-wider">Output</span>
+</div>
+<div class="flex-1 p-4 font-mono text-xs overflow-y-auto text-void-muted">
+<div class="flex gap-2">
+<span class="text-green-500">$</span>
+<span class="text-void-text">./gradlew assembleDebug</span>
+</div>
+<div class="mt-1 opacity-80">
+            &gt; Task :app:compileDebugKotlin<br/>
+            &gt; Task :app:processDebugResources<br/>
+            &gt; Task :app:assembleDebug<br/>
+<span class="text-green-500">BUILD SUCCESSFUL</span> in 12s
+          </div>
+<div class="mt-2 flex gap-2">
+<span class="text-green-500">$</span>
+<span class="border-r-2 border-void-accent animate-pulse w-1"> </span>
+</div>
+</div>
+</div>
+<!-- END: BottomPanel -->
+</div>
+<!-- END: MainEditorContainer -->
+<!-- BEGIN: AIPanel -->
+<aside class="w-[380px] bg-void-surface border-l-void flex flex-col" data-purpose="nexus-ai-panel">
+<div class="h-9 px-4 border-b-void flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-void-accent"></div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-void-text">NEXUS AI</span>
+</div>
+<div class="text-[10px] text-void-muted flex items-center gap-1">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Secure
+        </div>
+</div>
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- Chat History -->
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-void-accent uppercase tracking-tighter">Manager</span>
+<span class="text-[9px] text-void-muted">14:20</span>
+</div>
+<div class="text-xs leading-relaxed text-void-text/90 bg-void-bg border-void p-3 rounded-sm">
+              I've scanned the <span class="text-void-accent">LoginScreen.kt</span> file. Would you like me to implement the biometric authentication flow using the new security API?
+            </div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 justify-end">
+<span class="text-[9px] text-void-muted">14:21</span>
+<span class="text-[10px] font-bold text-void-muted uppercase tracking-tighter">User</span>
+</div>
+<div class="text-xs leading-relaxed text-void-text/90 bg-void-accent/5 border-void border-void-accent/20 p-3 rounded-sm self-end max-w-[90%]">
+              Yes, please. Make sure to handle the 'Not Enrolled' state specifically.
+            </div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-void-bg border-t-void">
+<!-- Context Chips -->
+<div class="flex gap-2 mb-3">
+<div class="flex items-center gap-1 bg-void-surface border-void px-2 py-0.5 rounded text-[9px] text-void-muted">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path></svg>
+              LoginScreen.kt
+            </div>
+<div class="flex items-center gap-1 bg-void-surface border-void px-2 py-0.5 rounded text-[9px] text-void-muted">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="10" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+              Full Project
+            </div>
+</div>
+<div class="relative">
+<textarea class="w-full bg-void-surface border-void rounded-sm p-3 text-xs text-void-text placeholder-void-muted focus:ring-1 focus:ring-void-accent focus:border-void-accent outline-none resize-none min-h-[80px]" placeholder="Ask the Manager..."></textarea>
+<div class="absolute bottom-2 right-2 flex gap-2">
+<button class="p-1.5 text-void-muted hover:text-void-accent">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.51a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+</button>
+<button class="bg-void-accent text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider">
+                Send
+              </button>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: AIPanel -->
+</main>
+<!-- BEGIN: StatusBar -->
+<footer class="h-6 bg-void-accent flex items-center justify-between px-3 text-white" data-purpose="status-bar">
+<div class="flex items-center gap-4 text-[10px] font-medium">
+<div class="flex items-center gap-1">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" x2="6" y1="9" y2="21"></line></svg>
+        main*
+      </div>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
+        Manager Active
+      </div>
+</div>
+<div class="flex items-center gap-6 text-[10px] font-medium">
+<div class="flex items-center gap-2">
+<span class="opacity-80">Internet:</span>
+<span class="font-bold">Encrypted Tunnel</span>
+</div>
+<div class="flex items-center gap-4">
+<span>Kotlin</span>
+<span>UTF-8</span>
+<div class="flex items-center gap-1">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Zero Claw
+        </div>
+<div class="flex items-center gap-2 bg-black/20 px-2 py-0.5 rounded">
+<span>RAM: 4.2GB</span>
+<span class="opacity-50">|</span>
+<span>CPU: 12%</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: StatusBar -->
+</body></html>

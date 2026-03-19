@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#FAFAFA",
+                        "background-dark": "#09090b",
+                        "border-light": "#E4E4E7",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: "Public Sans", sans-serif; background-color: #FAFAFA; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background-light text-slate-900">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Nav Bar -->
+<header class="flex items-center justify-between border-b border-border-light bg-white px-6 md:px-40 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="flex h-8 w-8 items-center justify-center rounded bg-slate-900 text-white">
+<span class="material-symbols-outlined text-lg">terminal</span>
+</div>
+<h2 class="text-slate-900 text-lg font-bold tracking-tight">NEXUS</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors" href="#">Missions</a>
+<a class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors" href="#">Agents</a>
+<a class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors" href="#">Vault</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-slate-100 transition-colors border border-border-light">
+<span class="material-symbols-outlined text-slate-600">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-slate-100 transition-colors border border-border-light">
+<span class="material-symbols-outlined text-slate-600">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center">
+<!-- Centered Layout Container -->
+<div class="w-full max-w-3xl px-6 py-12 flex flex-col gap-12">
+<!-- Hero Header & Input -->
+<section class="flex flex-col gap-6">
+<div>
+<h1 class="text-slate-900 text-4xl font-black tracking-tight mb-2">Mission Builder</h1>
+<p class="text-slate-500 text-lg">Architect your objective and deploy specialized neural agents.</p>
+</div>
+<div class="flex flex-col w-full">
+<textarea class="w-full bg-background-light border-0 border-b border-border-light focus:ring-0 focus:border-primary px-0 py-4 text-xl placeholder:text-slate-400 min-h-[120px] resize-none font-light" placeholder="What is the objective of this mission?"></textarea>
+<div class="flex items-center justify-between mt-4">
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border-light bg-white text-slate-600 text-xs font-medium hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">attach_file</span>
+<span>Context</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border-light bg-white text-slate-600 text-xs font-medium hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">language</span>
+<span>Web Search</span>
+</button>
+</div>
+<div class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Priority Level: Standard</div>
+</div>
+</div>
+</section>
+<!-- Agent Selection -->
+<section class="flex flex-col gap-4">
+<h3 class="text-slate-900 text-sm font-bold uppercase tracking-wider">Select Specialized Agents</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+<!-- Selected Agent -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-primary ring-1 ring-primary/20 shadow-sm cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Data Scout</p>
+<p class="text-[10px] text-slate-500">Retrieval Specialist</p>
+</div>
+</div>
+<!-- Default Agent -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-border-light hover:border-slate-300 transition-colors shadow-sm cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-600">code</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Logic Core</p>
+<p class="text-[10px] text-slate-500">Code Optimization</p>
+</div>
+</div>
+<!-- Default Agent -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-border-light hover:border-slate-300 transition-colors shadow-sm cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-600">security</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Sentinel</p>
+<p class="text-[10px] text-slate-500">Compliance &amp; Risk</p>
+</div>
+</div>
+<!-- Default Agent -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-border-light hover:border-slate-300 transition-colors shadow-sm cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-600">edit_note</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Synthesizer</p>
+<p class="text-[10px] text-slate-500">Content Generation</p>
+</div>
+</div>
+<!-- Default Agent -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-border-light hover:border-slate-300 transition-colors shadow-sm cursor-pointer">
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-600">hub</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900">Coordinator</p>
+<p class="text-[10px] text-slate-500">Multi-agent Routing</p>
+</div>
+</div>
+<!-- Add Custom -->
+<div class="flex items-center justify-center p-3 rounded-xl bg-slate-50 border border-dashed border-border-light hover:bg-slate-100 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 transition-colors">add_circle</span>
+</div>
+</div>
+</section>
+<!-- Mission Brief Section -->
+<section class="p-8 rounded-xl bg-white border border-border-light shadow-sm flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-border-light pb-4">
+<h3 class="text-slate-900 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">assignment</span>
+                        Mission Brief
+                    </h3>
+<span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold tracking-tighter">DRAFT #042</span>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Active Objectives</span>
+<p class="text-slate-700 text-sm leading-relaxed">Systematic audit of localized data points for market expansion analysis. Expected output: Structured report with vulnerability scoring.</p>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Agent Assignments</span>
+<div class="flex gap-2 mt-1">
+<div class="px-2 py-1 rounded-md bg-slate-50 border border-border-light text-[11px] font-medium text-slate-600">Data Scout</div>
+</div>
+</div>
+</div>
+<div class="pt-4 mt-2">
+<button class="w-full bg-[#09090B] hover:bg-slate-800 text-[#FAFAFA] font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+<span>LAUNCH MISSION</span>
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+</button>
+</div>
+</section>
+<!-- Bottom Meta -->
+<footer class="flex flex-col md:flex-row items-center justify-between gap-4 py-8 border-t border-border-light text-slate-400 text-xs">
+<div class="flex items-center gap-4">
+<span>System Status: <span class="text-green-500 font-medium">Operational</span></span>
+<span class="w-1 h-1 rounded-full bg-slate-300"></span>
+<span>Lat: 22ms</span>
+</div>
+<div class="flex items-center gap-6">
+<a class="hover:text-slate-600" href="#">Documentation</a>
+<a class="hover:text-slate-600" href="#">API</a>
+<a class="hover:text-slate-600" href="#">Privacy</a>
+</div>
+</footer>
+</div>
+</main>
+</div>
+</body></html>

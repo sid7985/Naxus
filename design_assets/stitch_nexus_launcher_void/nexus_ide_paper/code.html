@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS IDE - Professional Development Environment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                        "ui-gray": "#F4F4F5",
+                        "ui-border": "#E4E4E7",
+                        "ui-text-muted": "#71717A",
+                        "syntax-keyword": "#0000FF",
+                        "syntax-string": "#A31515",
+                        "syntax-comment": "#008000"
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"],
+                        "mono": ["JetBrains Mono", "Menlo", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="font-display bg-background-light text-slate-900 overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="h-10 flex items-center justify-between px-3 bg-ui-gray border-b border-ui-border select-none">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">deployed_code</span>
+<span class="text-xs font-semibold tracking-tight text-slate-700">NEXUS IDE</span>
+</div>
+<nav class="flex items-center gap-3 ml-4">
+<a class="text-[11px] text-slate-600 hover:bg-slate-200 px-2 py-1 rounded transition-colors" href="#">File</a>
+<a class="text-[11px] text-slate-600 hover:bg-slate-200 px-2 py-1 rounded transition-colors" href="#">Edit</a>
+<a class="text-[11px] text-slate-600 hover:bg-slate-200 px-2 py-1 rounded transition-colors" href="#">Selection</a>
+<a class="text-[11px] text-slate-600 hover:bg-slate-200 px-2 py-1 rounded transition-colors" href="#">View</a>
+<a class="text-[11px] text-slate-600 hover:bg-slate-200 px-2 py-1 rounded transition-colors" href="#">Go</a>
+<a class="text-[11px] text-slate-600 hover:bg-slate-200 px-2 py-1 rounded transition-colors" href="#">Run</a>
+</nav>
+</div>
+<div class="flex-1 max-w-md px-4">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-sm text-ui-text-muted">search</span>
+</div>
+<input class="w-full h-7 bg-white/50 border border-ui-border rounded text-[11px] pl-9 pr-4 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Search files, commands..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1 hover:bg-slate-200 rounded text-ui-text-muted transition-colors">
+<span class="material-symbols-outlined text-lg">splitscreen</span>
+</button>
+<button class="p-1 hover:bg-slate-200 rounded text-ui-text-muted transition-colors">
+<span class="material-symbols-outlined text-lg">dock_to_right</span>
+</button>
+<div class="h-6 w-[1px] bg-ui-border mx-1"></div>
+<div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">person</span>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Activity Bar (Far Left) -->
+<aside class="w-12 bg-ui-gray border-r border-ui-border flex flex-col items-center py-4 gap-4 flex-shrink-0">
+<button class="p-2 text-primary border-l-2 border-primary transition-all">
+<span class="material-symbols-outlined text-[24px]">content_copy</span>
+</button>
+<button class="p-2 text-ui-text-muted hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-[24px]">search</span>
+</button>
+<button class="p-2 text-ui-text-muted hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-[24px]">account_tree</span>
+</button>
+<button class="p-2 text-ui-text-muted hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-[24px]">play_circle</span>
+</button>
+<button class="p-2 text-ui-text-muted hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-[24px]">extension</span>
+</button>
+<div class="mt-auto flex flex-col gap-4">
+<button class="p-2 text-ui-text-muted hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+</button>
+<button class="p-2 text-ui-text-muted hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+</button>
+</div>
+</aside>
+<!-- Sidebar (Explorer) -->
+<aside class="w-64 bg-ui-gray border-r border-ui-border flex flex-col flex-shrink-0">
+<div class="h-9 px-4 flex items-center justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+<span>Explorer</span>
+<span class="material-symbols-outlined text-sm cursor-pointer">more_horiz</span>
+</div>
+<div class="flex-1 overflow-y-auto py-2 no-scrollbar">
+<div class="flex items-center px-4 py-1 gap-1 text-[12px] font-semibold text-slate-700 cursor-pointer">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+<span>NEXUS-IDE-CORE</span>
+</div>
+<div class="ml-4">
+<div class="flex items-center px-4 py-1 gap-2 text-[12px] text-slate-600 hover:bg-slate-200 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+<span class="material-symbols-outlined text-sm text-amber-500">folder</span>
+<span>src</span>
+</div>
+<div class="ml-6">
+<div class="flex items-center px-4 py-1 gap-2 text-[12px] text-slate-600 hover:bg-slate-200 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-sm text-blue-400">code</span>
+<span class="text-primary font-medium">Editor.tsx</span>
+</div>
+<div class="flex items-center px-4 py-1 gap-2 text-[12px] text-slate-600 hover:bg-slate-200 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-sm text-blue-400">code</span>
+<span>Main.tsx</span>
+</div>
+<div class="flex items-center px-4 py-1 gap-2 text-[12px] text-slate-600 hover:bg-slate-200 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-sm text-yellow-500">javascript</span>
+<span>utils.js</span>
+</div>
+</div>
+<div class="flex items-center px-4 py-1 gap-2 text-[12px] text-slate-600 hover:bg-slate-200 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="material-symbols-outlined text-sm text-amber-500">folder</span>
+<span>public</span>
+</div>
+<div class="flex items-center px-4 py-1 gap-2 text-[12px] text-slate-600 hover:bg-slate-200 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-sm text-slate-400">description</span>
+<span>package.json</span>
+</div>
+<div class="flex items-center px-4 py-1 gap-2 text-[12px] text-slate-600 hover:bg-slate-200 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-sm text-blue-500">info</span>
+<span>README.md</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Editor Area -->
+<section class="flex-1 flex flex-col bg-white overflow-hidden">
+<!-- Tabs -->
+<div class="h-9 bg-ui-gray flex border-b border-ui-border overflow-x-auto no-scrollbar">
+<div class="flex items-center bg-white border-r border-ui-border px-4 py-1 gap-2 text-[12px] text-slate-800 border-t-2 border-t-primary min-w-[120px] select-none">
+<span class="material-symbols-outlined text-sm text-blue-400">code</span>
+<span>Editor.tsx</span>
+<span class="material-symbols-outlined text-[14px] ml-auto hover:bg-slate-100 rounded cursor-pointer">close</span>
+</div>
+<div class="flex items-center hover:bg-slate-200 border-r border-ui-border px-4 py-1 gap-2 text-[12px] text-ui-text-muted min-w-[120px] select-none transition-colors">
+<span class="material-symbols-outlined text-sm text-yellow-500">javascript</span>
+<span>utils.js</span>
+<span class="material-symbols-outlined text-[14px] ml-auto hover:bg-slate-300 rounded cursor-pointer">close</span>
+</div>
+<div class="flex items-center hover:bg-slate-200 border-r border-ui-border px-4 py-1 gap-2 text-[12px] text-ui-text-muted min-w-[120px] select-none transition-colors">
+<span class="material-symbols-outlined text-sm text-blue-500">info</span>
+<span>README.md</span>
+<span class="material-symbols-outlined text-[14px] ml-auto hover:bg-slate-300 rounded cursor-pointer">close</span>
+</div>
+</div>
+<!-- Breadcrumbs -->
+<div class="h-6 flex items-center px-4 gap-2 text-[11px] text-ui-text-muted bg-white border-b border-ui-border/50">
+<span>src</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span>components</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-slate-800">Editor.tsx</span>
+</div>
+<!-- Code Editor Surface -->
+<div class="flex-1 flex font-mono text-[13px] leading-6 overflow-hidden">
+<!-- Line Numbers -->
+<div class="w-12 flex flex-col items-end pr-4 py-4 text-slate-300 select-none bg-white">
+<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span>
+</div>
+<!-- Content -->
+<div class="flex-1 py-4 overflow-auto no-scrollbar">
+<div><span class="text-syntax-keyword">import</span> React, { useState } <span class="text-syntax-keyword">from</span> <span class="text-syntax-string">'react'</span>;</div>
+<div><span class="text-syntax-keyword">import</span> { NexusIDE } <span class="text-syntax-keyword">from</span> <span class="text-syntax-string">'@nexus/core'</span>;</div>
+<div class="h-6"></div>
+<div><span class="text-syntax-comment">// Initialize the Nexus IDE Environment</span></div>
+<div><span class="text-syntax-keyword">const</span> <span class="text-slate-800">EditorContainer</span> = () =&gt; {</div>
+<div class="ml-4"><span class="text-syntax-keyword">const</span> [code, setCode] = useState(<span class="text-syntax-string">""</span>);</div>
+<div class="h-6"></div>
+<div class="ml-4"><span class="text-syntax-keyword">return</span> (</div>
+<div class="ml-8 text-slate-800">&lt;<span class="text-syntax-keyword">div</span> className=<span class="text-syntax-string">"editor-root"</span>&gt;</div>
+<div class="ml-12 text-slate-800">&lt;<span class="text-syntax-keyword">NexusIDE</span> theme=<span class="text-syntax-string">"paper-light"</span> /&gt;</div>
+<div class="ml-8 text-slate-800">&lt;/<span class="text-syntax-keyword">div</span>&gt;</div>
+<div class="ml-4">);</div>
+<div>};</div>
+</div>
+</div>
+</section>
+<!-- Right Side AI Panel -->
+<aside class="w-80 bg-ui-gray border-l border-ui-border flex flex-col flex-shrink-0">
+<div class="h-9 px-4 flex items-center justify-between border-b border-ui-border">
+<span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">AI Assistant</span>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-sm text-ui-text-muted cursor-pointer hover:text-slate-900">refresh</span>
+<span class="material-symbols-outlined text-sm text-ui-text-muted cursor-pointer hover:text-slate-900">close</span>
+</div>
+</div>
+<div class="flex-1 p-4 overflow-y-auto no-scrollbar flex flex-col gap-4">
+<div class="bg-white p-3 rounded-lg border border-ui-border shadow-sm">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-white">auto_awesome</span>
+</div>
+<span class="text-[11px] font-semibold text-slate-700">Nexus AI</span>
+</div>
+<p class="text-[12px] text-slate-600 leading-relaxed">
+                        I've analyzed your <code class="bg-slate-100 px-1 rounded text-primary">Editor.tsx</code>. Would you like me to optimize the render cycle for better performance?
+                    </p>
+</div>
+<div class="self-end bg-primary/10 p-3 rounded-lg border border-primary/20 max-w-[90%]">
+<p class="text-[12px] text-slate-700">Yes, please explain how the current state management could be improved.</p>
+</div>
+</div>
+<div class="p-3 border-t border-ui-border bg-white">
+<div class="relative">
+<textarea class="w-full h-24 p-2 bg-slate-50 border border-ui-border rounded text-[12px] resize-none focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Ask AI anything..."></textarea>
+<button class="absolute bottom-2 right-2 p-1.5 bg-primary text-white rounded hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</aside>
+</main>
+<!-- Status Bar -->
+<footer class="h-6 bg-ui-gray border-t border-ui-border flex items-center justify-between px-3 text-ui-text-muted select-none">
+<div class="flex items-center gap-4 h-full">
+<div class="flex items-center gap-1.5 px-2 hover:bg-slate-200 h-full cursor-pointer transition-colors text-[11px]">
+<span class="material-symbols-outlined text-[14px]">account_tree</span>
+<span>main*</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 hover:bg-slate-200 h-full cursor-pointer transition-colors text-[11px]">
+<span class="material-symbols-outlined text-[14px]">sync</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 hover:bg-slate-200 h-full cursor-pointer transition-colors text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-red-500">error</span>
+<span>0</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">warning</span>
+<span>2</span>
+</div>
+</div>
+<div class="flex items-center gap-4 h-full">
+<div class="px-2 hover:bg-slate-200 h-full flex items-center text-[11px] cursor-pointer transition-colors">
+                Ln 8, Col 24
+            </div>
+<div class="px-2 hover:bg-slate-200 h-full flex items-center text-[11px] cursor-pointer transition-colors">
+                Spaces: 2
+            </div>
+<div class="px-2 hover:bg-slate-200 h-full flex items-center text-[11px] cursor-pointer transition-colors">
+                UTF-8
+            </div>
+<div class="px-2 hover:bg-slate-200 h-full flex items-center text-[11px] cursor-pointer transition-colors font-medium">
+                TypeScript JSX
+            </div>
+<div class="flex items-center gap-1 px-2 hover:bg-slate-200 h-full cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[14px]">notifications</span>
+</div>
+</div>
+</footer>
+</body></html>

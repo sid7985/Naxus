@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#FAFAFA",
+                        "background-dark": "#221610",
+                        "sidebar-light": "#F4F4F5",
+                        "border-light": "#E5E5E5",
+                        "accent-purple": "#7C3AED",
+                        "accent-light-purple": "#EDE9FE",
+                        "neutral-text": "#3A3A3A",
+                        "secondary-text": "#9B9B9B",
+                        "code-bg": "#F0F0F0",
+                        "code-text": "#6D28D9",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background-light text-neutral-text antialiased">
+<div class="flex h-screen overflow-hidden">
+<!-- LEFT SIDEBAR -->
+<aside class="w-64 bg-sidebar-light border-r border-border-light flex flex-col shrink-0">
+<div class="p-4 border-b border-border-light flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">hub</span>
+</div>
+<div>
+<h1 class="text-sm font-bold tracking-tight text-neutral-text">NEXUS</h1>
+<p class="text-[10px] text-secondary-text uppercase font-semibold">Command Center</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto p-2 space-y-1">
+<div class="px-3 py-2 text-[11px] font-semibold text-secondary-text uppercase tracking-wider">Navigation</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-[#ECECEC] text-neutral-text transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium bg-accent-light-purple text-accent-purple transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] fill-current">smart_toy</span>
+                Agents
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-[#ECECEC] text-neutral-text transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">description</span>
+                Logs
+            </a>
+<div class="pt-4 px-3 py-2 text-[11px] font-semibold text-secondary-text uppercase tracking-wider">Active Units</div>
+<div class="space-y-1">
+<div class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#ECECEC] cursor-pointer group">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-green-500"></div>
+<span class="text-xs font-medium">Primary_Coord</span>
+</div>
+<span class="text-[10px] text-secondary-text opacity-0 group-hover:opacity-100 transition-opacity">48h</span>
+</div>
+<div class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#ECECEC] cursor-pointer group">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-green-500"></div>
+<span class="text-xs font-medium">Data_Synthesizer</span>
+</div>
+<span class="text-[10px] text-secondary-text opacity-0 group-hover:opacity-100 transition-opacity">12h</span>
+</div>
+<div class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#ECECEC] cursor-pointer group">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-amber-500"></div>
+<span class="text-xs font-medium">Log_Monitor</span>
+</div>
+<span class="text-[10px] text-secondary-text opacity-0 group-hover:opacity-100 transition-opacity">Idle</span>
+</div>
+</div>
+</nav>
+<div class="p-4 border-t border-border-light">
+<div class="flex items-center gap-3 mb-4">
+<img class="size-8 rounded-full border border-border-light" data-alt="User avatar placeholder profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_adVY68w3QaMzR_nX7xRG1HM0mcVSV6lACDaiV7Zj9Q0l6A5xgDdTVPtL1fSmHButZudnEYOu-ZPjHdgUyd9HVQvOAOVOUmeN-GwltgP6-nMeyaWVVkMNFzP5wMdn9wQUV2BYa_65KWEVzR8GW3pRNQygVywiQhXRdlriB0As_3snCeMD-2RiFXwfyL60mWXgZBGFVZF8wENm_g5N8ZtZTjNC-NRiPePvmALbi3d08TjaVxOyGUj-T5raKw-y_PY5nFRt5hE66QA"/>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-semibold truncate">Alex Chen</p>
+<p class="text-[10px] text-secondary-text truncate">Lead Operator</p>
+</div>
+<span class="material-symbols-outlined text-secondary-text text-lg cursor-pointer hover:text-neutral-text transition-colors">settings</span>
+</div>
+</div>
+</aside>
+<!-- CENTER CONTENT (CHAT/COMMAND AREA) -->
+<main class="flex-1 flex flex-col bg-background-light min-w-0">
+<!-- Header -->
+<header class="h-14 border-b border-border-light flex items-center justify-between px-6 bg-background-light/80 backdrop-blur-sm sticky top-0 z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-text">terminal</span>
+<span class="text-sm font-semibold">Primary Coordinator</span>
+<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase">Active</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-white border border-border-light rounded-lg px-2 py-1">
+<span class="material-symbols-outlined text-secondary-text text-lg">search</span>
+<input class="border-none bg-transparent focus:ring-0 text-xs w-40 placeholder:text-secondary-text" placeholder="Search logs..." type="text"/>
+</div>
+<button class="text-secondary-text hover:text-neutral-text transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Message Feed -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- System Message -->
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-secondary-text uppercase bg-sidebar-light px-3 py-1 rounded-full border border-border-light">Session started Oct 24, 08:30 AM</span>
+</div>
+<!-- Agent Message -->
+<div class="flex gap-4 max-w-3xl">
+<div class="size-8 rounded bg-accent-light-purple text-accent-purple flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm">robot_2</span>
+</div>
+<div class="space-y-2 flex-1">
+<p class="text-sm leading-relaxed text-neutral-text">I have analyzed the current cluster status. Three nodes are reporting higher than usual latency in the <code class="bg-code-bg text-code-text px-1 rounded font-mono text-xs">us-east-1</code> region. Would you like me to initiate the rebalancing protocol?</p>
+<div class="bg-code-bg rounded-lg p-3 font-mono text-[11px] text-code-text border border-border-light">
+<span class="text-gray-500">// Latency Metrics</span><br/>
+                        node-01: 142ms (warn)<br/>
+                        node-04: 156ms (warn)<br/>
+                        node-09: 189ms (critical)
+                    </div>
+</div>
+</div>
+<!-- Operator Message -->
+<div class="flex gap-4 max-w-3xl ml-auto flex-row-reverse">
+<div class="size-8 rounded bg-primary text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<div class="bg-sidebar-light border border-border-light rounded-2xl rounded-tr-none px-4 py-3 shadow-sm">
+<p class="text-sm text-neutral-text">Proceed with node-09 rebalancing first. Hold off on node-01 and node-04 until we see the results of the first operation.</p>
+</div>
+</div>
+<!-- Agent Message -->
+<div class="flex gap-4 max-w-3xl">
+<div class="size-8 rounded bg-accent-light-purple text-accent-purple flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm">robot_2</span>
+</div>
+<div class="space-y-2 flex-1">
+<p class="text-sm leading-relaxed text-neutral-text">Understood. Initiating <code class="bg-code-bg text-code-text px-1 rounded font-mono text-xs">protocol_alpha_09</code>. Estimated completion in 45 seconds.</p>
+<div class="w-full bg-border-light h-1 rounded-full overflow-hidden">
+<div class="bg-accent-purple h-full w-2/3"></div>
+</div>
+<p class="text-[10px] text-secondary-text italic">Processing shard migration... 67% complete</p>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<footer class="p-6 pt-2 bg-background-light">
+<div class="max-w-4xl mx-auto relative">
+<textarea class="w-full bg-white border border-[#E0E0E0] rounded-xl py-3 pl-4 pr-12 focus:border-accent-purple focus:ring-0 text-sm resize-none transition-all placeholder:text-secondary-text shadow-sm" placeholder="Enter command or message..." rows="1"></textarea>
+<button class="absolute right-2 top-1.5 size-8 bg-accent-purple text-white rounded-lg flex items-center justify-center hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined text-lg">arrow_upward</span>
+</button>
+</div>
+<div class="flex justify-center gap-4 mt-3">
+<button class="text-[10px] text-secondary-text hover:text-accent-purple font-medium flex items-center gap-1 uppercase tracking-wide">
+<span class="material-symbols-outlined text-xs">attach_file</span> Attach Data
+                </button>
+<button class="text-[10px] text-secondary-text hover:text-accent-purple font-medium flex items-center gap-1 uppercase tracking-wide">
+<span class="material-symbols-outlined text-xs">bolt</span> Force Reset
+                </button>
+<button class="text-[10px] text-secondary-text hover:text-accent-purple font-medium flex items-center gap-1 uppercase tracking-wide">
+<span class="material-symbols-outlined text-xs">history</span> Session Logs
+                </button>
+</div>
+</footer>
+</main>
+<!-- RIGHT RAIL (TELEMETRY) -->
+<aside class="w-80 bg-sidebar-light border-l border-border-light flex flex-col shrink-0">
+<div class="p-4 border-b border-border-light">
+<h2 class="text-xs font-bold uppercase tracking-widest text-secondary-text">Telemetry Data</h2>
+</div>
+<div class="p-4 space-y-6 overflow-y-auto">
+<!-- Resource Usage Card -->
+<div class="bg-white border border-border-light rounded-xl p-4 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-semibold">CPU Utilization</span>
+<span class="text-xs text-accent-purple font-bold">42%</span>
+</div>
+<div class="w-full bg-sidebar-light h-2 rounded-full mb-1">
+<div class="bg-accent-purple h-full w-[42%] rounded-full"></div>
+</div>
+<div class="flex justify-between text-[10px] text-secondary-text">
+<span>Base: 1.2GHz</span>
+<span>Peak: 4.8GHz</span>
+</div>
+</div>
+<div class="bg-white border border-border-light rounded-xl p-4 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-semibold">Memory Pool</span>
+<span class="text-xs text-primary font-bold">88%</span>
+</div>
+<div class="w-full bg-sidebar-light h-2 rounded-full mb-1">
+<div class="bg-primary h-full w-[88%] rounded-full"></div>
+</div>
+<div class="flex justify-between text-[10px] text-secondary-text">
+<span>Avail: 4.2GB</span>
+<span>Total: 32GB</span>
+</div>
+</div>
+<!-- Location Insight -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold uppercase tracking-widest text-secondary-text">Active Region</span>
+<span class="material-symbols-outlined text-sm text-secondary-text">map</span>
+</div>
+<div class="aspect-video bg-[#E5E5E5] rounded-xl overflow-hidden relative group cursor-pointer border border-border-light">
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+<div class="absolute bottom-2 left-2 text-white text-[10px] font-bold">VIRGINIA, USA</div>
+<div class="h-full w-full bg-center bg-cover" data-alt="Minimalist map representation of US East region" data-location="Northern Virginia" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLw8IdjI4jA9_6M7VyaDJadJR8JsQltNu2torZtuMrk67ed6m73OJKtXfnLWQ1abxd5JIojkriFyBkDc6ZKaDj_eGhZm00I5rK6bNSwOJVaR5xpE5tHwNgp-tIY8jC-PrzwYIUK2hDvv7fnsEgeCG21LSJ6lnU0HBs34LyrSCYRpZDImOpyaqVnTnubN1UJ8EdX7pZOt21IQhkTmD5Z3YjaqOjPPXURebJv7UT-vxMk3aqv5BDFVQ0L2raIET6tJbI5UUV1llr1B0');">
+</div>
+</div>
+</div>
+<!-- Activity Timeline -->
+<div>
+<span class="text-xs font-bold uppercase tracking-widest text-secondary-text block mb-3">Event Timeline</span>
+<div class="space-y-4 relative before:content-[''] before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[1px] before:bg-border-light">
+<div class="flex gap-3 relative">
+<div class="size-3 rounded-full bg-green-500 border-2 border-sidebar-light z-10 mt-1"></div>
+<div>
+<p class="text-[11px] font-medium leading-none">Security sweep completed</p>
+<p class="text-[10px] text-secondary-text">09:12 AM</p>
+</div>
+</div>
+<div class="flex gap-3 relative">
+<div class="size-3 rounded-full bg-accent-purple border-2 border-sidebar-light z-10 mt-1"></div>
+<div>
+<p class="text-[11px] font-medium leading-none">Protocol alpha_09 started</p>
+<p class="text-[10px] text-secondary-text">09:08 AM</p>
+</div>
+</div>
+<div class="flex gap-3 relative">
+<div class="size-3 rounded-full bg-amber-500 border-2 border-sidebar-light z-10 mt-1"></div>
+<div>
+<p class="text-[11px] font-medium leading-none">Latency alert: Node-09</p>
+<p class="text-[10px] text-secondary-text">08:55 AM</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-4 bg-white/50 border-t border-border-light">
+<button class="w-full py-2 bg-sidebar-light border border-border-light rounded-lg text-xs font-bold uppercase tracking-widest text-secondary-text hover:bg-[#ECECEC] transition-colors">
+                Export Session Data
+            </button>
+</div>
+</aside>
+</div>
+</body></html>
