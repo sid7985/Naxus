@@ -15,7 +15,7 @@ import { ollama } from '../services/ollama';
 import { orchestrator } from '../services/orchestrator';
 import { APP_NAME } from '../lib/constants';
 import { formatTimestamp } from '../lib/utils';
-
+import OfficeSimulator from '../components/ide/OfficeSimulator';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Crown, Code2, Palette, Megaphone, Bug, Search,
@@ -272,6 +272,10 @@ export default function CommandCenterPage() {
             <span className="text-xs font-mono text-text-muted">
               {workspace.projectName || 'NEXUS Workspace'}
             </span>
+          </div>
+
+          <div className="w-full h-56 border-b border-glass-border shrink-0 z-10 hidden md:block">
+            <OfficeSimulator />
           </div>
 
           {/* Feed */}

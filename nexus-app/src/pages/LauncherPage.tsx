@@ -63,7 +63,7 @@ export default function LauncherPage() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center relative overflow-hidden nebula-bg">
+    <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-start md:justify-center overflow-y-auto overflow-x-hidden nebula-bg py-12 px-4">
       {/* Animated background orbs */}
       <motion.div
         className="absolute w-[600px] h-[600px] rounded-full opacity-[0.03]"
