@@ -15,19 +15,6 @@ export default function AgentSprite({ role }: AgentSpriteProps) {
   const { state, position, speechBubbles } = agentData;
   const color = AGENT_COLORS[role];
 
-  // Map state to the correct pose image
-  const getPoseImage = () => {
-    switch (state) {
-      case 'idle': return `/avatars/${role}/idle.png`;
-      case 'walking': return `/avatars/${role}/walking.png`;
-      case 'thinking': return `/avatars/${role}/thinking.png`;
-      case 'working': return `/avatars/${role}/working.png`;
-      case 'done': return `/avatars/${role}/idle.png`; // Fallback to idle for now
-      case 'error': return `/avatars/${role}/idle.png`; // Fallback to idle 
-      default: return `/avatars/${role}/idle.png`;
-    }
-  };
-
   return (
     <motion.div
       className={`rpg-agent rpg-state-${state}`}
@@ -54,15 +41,12 @@ export default function AgentSprite({ role }: AgentSpriteProps) {
       {/* Base Drop Shadow */}
       <div className="rpg-shadow" />
 
-      {/* The Sprite Image */}
-      <img
-        src={getPoseImage()}
-        alt={`${role} avatar`}
+      {/* The Sprite Image (Animated via CSS Background) */}
+      <div
         className="rpg-sprite"
         style={{ 
           '--glow-color': color,
-          // CSS filter tinting to differentiate the reused MVP sprites
-          filter: role !== 'manager' ? `hue-rotate(${getHueOffset(role)}deg) drop-shadow(0 8px 8px rgba(0,0,0,0.5))` : undefined
+          filter: role !== 'manager' ? `hue-rotate(${getHueOffset(role)}deg) drop-shadow(0 4px 4px rgba(0,0,0,0.5))` : undefined
         } as React.CSSProperties}
       />
 

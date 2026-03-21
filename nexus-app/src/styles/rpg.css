@@ -64,50 +64,85 @@
  * STATES 
  */
 
-/* Idle bob */
-.rpg-state-idle .rpg-sprite {
-  animation: bob 3s ease-in-out infinite;
+/* Sprite Sheet Animation Setup */
+.rpg-sprite {
+  width: 16px;
+  height: 36px;
+  background-image: url('/pixel-office/characters.png');
+  background-size: 160px 36px;
+  transform: scale(3); /* Make character larger and visible */
+  transform-origin: bottom center;
+  image-rendering: pixelated;
+  transition: filter 0.2s ease;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4));
+}
+
+/* 
+ * STATES 
+ */
+
+/* 
+  The characters.png has 10 frames total (160/16 = 10).
+  Frames 0-3: Walk Down / Idle
+*/
+
+@keyframes walk-down {
+  from { background-position: 0px 0; }
+  to { background-position: -64px 0; } /* 4 frames * 16px */
+}
+
+@keyframes idle-bob {
+  0%, 100% { background-position: -16px 0; transform: scale(3) translateY(0); }
+  50% { background-position: -16px 0; transform: scale(3) translateY(-1px); }
+}
+
+@keyframes work-shake {
+  0%, 100% { background-position: 0px 0; transform: scale(3) rotate(0deg); }
+  50% { background-position: -16px 0; transform: scale(3) rotate(2deg); }
+}
+
+/* Idle / Done */
+.rpg-state-idle .rpg-sprite,
+.rpg-state-done .rpg-sprite {
+  animation: idle-bob 2s ease-in-out infinite;
 }
 
 /* Thinking float + glow */
 .rpg-state-thinking .rpg-sprite {
+  background-position: -16px 0;
   animation: float 2.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 15px var(--glow-color, rgba(255,255,255,0.8))) drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 0 10px var(--glow-color, rgba(255,255,255,0.8))) drop-shadow(0 2px 2px rgba(0,0,0,0.5));
 }
 
-/* Walking slide */
+/* Walking */
 .rpg-state-walking .rpg-sprite {
-  animation: walk-bob 0.5s ease-in-out infinite alternate;
+  animation: walk-down 0.6s steps(4) infinite;
+}
+
+/* Working (Fast typing/bobbing) */
+.rpg-state-working .rpg-sprite {
+  animation: work-shake 0.3s steps(2) infinite;
 }
 
 /* Error shake */
 .rpg-state-error .rpg-sprite {
+  background-position: -16px 0;
   animation: shake 0.4s ease-in-out infinite;
   filter: drop-shadow(0 0 10px #ff3333);
 }
 
-/* Animations */
-@keyframes bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-
+/* Animations Keyframes */
 @keyframes float {
-  0%, 100% { transform: translateY(-5px); }
-  50% { transform: translateY(-12px); }
-}
-
-@keyframes walk-bob {
-  from { transform: translateY(0); }
-  to { transform: translateY(-6px); }
+  0%, 100% { transform: scale(3) translateY(-2px); }
+  50% { transform: scale(3) translateY(-6px); }
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(2px); }
-  50% { transform: translateX(0); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
+  0% { transform: scale(3) translateX(0); }
+  25% { transform: scale(3) translateX(1px); }
+  50% { transform: scale(3) translateX(0); }
+  75% { transform: scale(3) translateX(-1px); }
+  100% { transform: scale(3) translateX(0); }
 }
 
 /* Speech Bubble */

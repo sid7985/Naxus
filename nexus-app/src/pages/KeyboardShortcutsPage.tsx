@@ -5,6 +5,7 @@ import {
 import PageHeader from '../components/layout/PageHeader';
 import GlassInput from '../components/ui/GlassInput';
 import PageTransition from '../components/layout/PageTransition';
+import GlassPanel from '../components/ui/GlassPanel';
 
 interface Shortcut {
   id: string;

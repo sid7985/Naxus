@@ -162,7 +162,7 @@ export default function MemoryGraphPage() {
           maxZoom={4}
           proOptions={{ hideAttribution: true }}
         >
-          <Background color="rgba(255,255,255,0.08)" gap={20} size={1} />
+          <Background color="rgba(124,58,237,0.15)" gap={24} size={1.5} />
           <Controls 
             className="bg-glass border border-glass-border fill-white text-white rounded-lg overflow-hidden shadow-2xl" 
             showInteractive={false} 

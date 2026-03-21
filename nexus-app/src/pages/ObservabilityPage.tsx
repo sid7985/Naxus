@@ -197,7 +197,7 @@ export default function ObservabilityPage() {
                       <div className="h-1.5 bg-void rounded-full overflow-hidden">
                         <motion.div
                           className="h-full rounded-full"
-                          style={{ background: item.color }}
+                          style={{ background: item.color, boxShadow: `0 0 10px ${item.color}` }}
                           initial={{ width: 0 }}
                           animate={{ width: `${item.value}%` }}
                           transition={{ duration: 1, ease: 'easeOut' }}
@@ -226,7 +226,7 @@ export default function ObservabilityPage() {
                       <div className="h-1.5 bg-void rounded-full overflow-hidden">
                         <motion.div
                           className="h-full rounded-full"
-                          style={{ background: item.color }}
+                          style={{ background: item.color, boxShadow: `0 0 10px ${item.color}` }}
                           initial={{ width: 0 }}
                           animate={{ width: `${item.value}%` }}
                           transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}

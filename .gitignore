@@ -39,3 +39,6 @@ auth/
 # Application Data
 .gemini/
 brain/
+whisk_images/
+
+tools/

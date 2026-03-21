@@ -1,162 +1,242 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plug, Search, ExternalLink, CheckCircle2,
-  XCircle, RefreshCw, Settings, Zap, Link2
+import {
+  Plug, ExternalLink, CheckCircle2, XCircle, RefreshCw,
+  Play, Terminal, Globe, Code2, Workflow, Bot, Cpu, X
 } from 'lucide-react';
 import GlassPanel from '../components/ui/GlassPanel';
 import PageHeader from '../components/layout/PageHeader';
 import NeonIcon from '../components/ui/NeonIcon';
-import { CONNECTOR_REGISTRY, type ConnectorConfig, type ConnectorStatus } from '../services/connectors';
 import PageTransition from '../components/layout/PageTransition';
 
-type CategoryFilter = 'all' | 'automation' | 'communication' | 'storage' | 'development' | 'ai' | 'analytics';
+import { n8nService } from '../services/n8n';
+import { nodeRedService } from '../services/nodeRedService';
+import { nanoclawService } from '../services/nanoclawService';
+import { theiaService } from '../services/theiaService';
+import { opencodeService } from '../services/opencodeService';
 
-const CATEGORY_LABELS: Record<CategoryFilter, string> = {
-  all: 'All', automation: 'Automation', communication: 'Communication',
-  storage: 'Storage', development: 'Dev Tools', ai: 'AI Models', analytics: 'Analytics' };
+type ServiceStatus = 'running' | 'stopped' | 'checking';
 
-const STATUS_UI: Record<ConnectorStatus, { label: string; color: string }> = {
-  connected: { label: 'Connected', color: '#10B981' },
-  disconnected: { label: 'Not Connected', color: '#606070' },
-  error: { label: 'Error', color: '#F43F5E' },
-  pending: { label: 'Connecting...', color: '#F59E0B' } };
+interface ExternalTool {
+  id: string;
+  name: string;
+  description: string;
+  port: number | null;
+  url: string;
+  icon: typeof Workflow;
+  color: string;
+  category: 'automation' | 'ide' | 'agent' | 'cli';
+  launchCmd: string;
+  docsUrl: string;
+  embedable: boolean;
+}
+
+const TOOLS: ExternalTool[] = [
+  {
+    id: 'n8n',
+    name: 'n8n',
+    description: 'Visual workflow automation with 400+ integrations. Build AI agent workflows, connect APIs, and automate tasks.',
+    port: 5678,
+    url: 'http://localhost:5678',
+    icon: Workflow,
+    color: '#FF6D5A',
+    category: 'automation',
+    launchCmd: 'npx n8n',
+    docsUrl: 'https://docs.n8n.io',
+    embedable: true,
+  },
+  {
+    id: 'node-red',
+    name: 'Node-RED',
+    description: 'Low-code flow-based programming for event-driven applications. Wire together APIs, devices, and services.',
+    port: 1880,
+    url: 'http://localhost:1880',
+    icon: Globe,
+    color: '#8F0000',
+    category: 'automation',
+    launchCmd: 'node-red',
+    docsUrl: 'https://nodered.org/docs/',
+    embedable: true,
+  },
+  {
+    id: 'nanoclaw',
+    name: 'NanoClaw',
+    description: 'AI agent framework with Docker sandboxes. Connects to WhatsApp, Telegram, Slack, Discord, Gmail.',
+    port: 3000,
+    url: 'http://localhost:3000',
+    icon: Bot,
+    color: '#22C55E',
+    category: 'agent',
+    launchCmd: 'cd tools/nanoclaw && npm start',
+    docsUrl: 'https://nanoclaw.dev',
+    embedable: false,
+  },
+  {
+    id: 'theia',
+    name: 'Eclipse Theia',
+    description: 'Cloud & desktop IDE framework. Full VS Code extension compatibility with modular architecture.',
+    port: 3030,
+    url: 'http://localhost:3030',
+    icon: Code2,
+    color: '#5B69FF',
+    category: 'ide',
+    launchCmd: 'docker run -d -p 3030:3000 theiaide/theia:latest',
+    docsUrl: 'https://theia-ide.org/docs/',
+    embedable: true,
+  },
+  {
+    id: 'opencode',
+    name: 'OpenCode',
+    description: 'Terminal AI coding agent built in Go. Multi-provider (Ollama, OpenAI, Anthropic, Gemini). TUI interface.',
+    port: null,
+    url: '',
+    icon: Terminal,
+    color: '#A78BFA',
+    category: 'cli',
+    launchCmd: 'opencode',
+    docsUrl: 'https://github.com/opencode-ai/opencode',
+    embedable: false,
+  },
+];
+
+const CATEGORY_COLORS: Record<string, string> = {
+  automation: '#FF6D5A',
+  ide: '#5B69FF',
+  agent: '#22C55E',
+  cli: '#A78BFA',
+};
 
 export default function IntegrationsPage() {
-  const [connectors, setConnectors] = useState<ConnectorConfig[]>(CONNECTOR_REGISTRY);
-  const [filter, setFilter] = useState<CategoryFilter>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selected, setSelected] = useState<ConnectorConfig | null>(null);
-  const [configUrl, setConfigUrl] = useState('');
-  const [configKey, setConfigKey] = useState('');
+  const [statuses, setStatuses] = useState<Record<string, ServiceStatus>>({});
+  const [selectedTool, setSelectedTool] = useState<ExternalTool | null>(null);
+  const [embedUrl, setEmbedUrl] = useState<string | null>(null);
 
-  const filtered = connectors.filter((c) => {
-    const matchCat = filter === 'all' || c.category === filter;
-    const matchSearch = !searchQuery ||
-      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCat && matchSearch;
-  });
+  const checkAllHealth = useCallback(async () => {
+    const newStatuses: Record<string, ServiceStatus> = {};
+    
+    // Mark all as checking
+    TOOLS.forEach((t) => { newStatuses[t.id] = 'checking'; });
+    setStatuses({ ...newStatuses });
 
-  const stats = {
-    total: connectors.length,
-    connected: connectors.filter((c) => c.status === 'connected').length };
+    // Check in parallel
+    const [n8nOk, nodeRedOk, nanoclawOk, theiaOk] = await Promise.all([
+      n8nService.isHealthy(),
+      nodeRedService.isHealthy(),
+      nanoclawService.isHealthy(),
+      theiaService.isHealthy(),
+    ]);
+
+    const openCodeOk = await opencodeService.isInstalled();
+
+    setStatuses({
+      'n8n': n8nOk ? 'running' : 'stopped',
+      'node-red': nodeRedOk ? 'running' : 'stopped',
+      'nanoclaw': nanoclawOk ? 'running' : 'stopped',
+      'theia': theiaOk ? 'running' : 'stopped',
+      'opencode': openCodeOk ? 'running' : 'stopped',
+    });
+  }, []);
 
   useEffect(() => {
-    if (selected) {
-      setConfigUrl(selected.baseUrl || '');
-      setConfigKey(selected.apiKey || '');
-    }
-  }, [selected]);
+    checkAllHealth();
+    const interval = setInterval(checkAllHealth, 15000);
+    return () => clearInterval(interval);
+  }, [checkAllHealth]);
 
-  const testConnection = (id: string) => {
-    setConnectors((prev) => prev.map((c) =>
-      c.id === id ? { ...c, status: 'pending' as ConnectorStatus } : c
-    ));
-    // Simulate connection test
-    setTimeout(() => {
-      setConnectors((prev) => prev.map((c) =>
-        c.id === id ? { ...c, status: Math.random() > 0.3 ? 'connected' as ConnectorStatus : 'error' as ConnectorStatus } : c
-      ));
-    }, 1500);
+  const getStatusColor = (status: ServiceStatus) => {
+    if (status === 'running') return '#10B981';
+    if (status === 'checking') return '#F59E0B';
+    return '#606070';
   };
 
-  const saveConfig = () => {
-    if (!selected) return;
-    setConnectors((prev) => prev.map((c) =>
-      c.id === selected.id ? { ...c, baseUrl: configUrl, apiKey: configKey } : c
-    ));
-    setSelected({ ...selected, baseUrl: configUrl, apiKey: configKey });
+  const getStatusLabel = (status: ServiceStatus) => {
+    if (status === 'running') return 'Running';
+    if (status === 'checking') return 'Checking...';
+    return 'Stopped';
   };
+
+  const runningCount = Object.values(statuses).filter((s) => s === 'running').length;
 
   return (
     <PageTransition>
     <div className="h-full flex flex-col">
       <PageHeader
         title="Integrations Hub"
-        subtitle="Connect external services"
+        subtitle="External tools & services"
         icon={Plug}
         iconColor="#06B6D4"
-        badge={`${stats.connected}/${stats.total} connected`}
+        badge={`${runningCount}/${TOOLS.length} running`}
         actions={
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-glass rounded-xl border border-glass-border">
-            <Search className="w-3.5 h-3.5 text-text-muted" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search integrations..."
-              className="bg-transparent text-xs text-white placeholder:text-text-muted outline-none w-40"
-            />
-          </div>
+          <button
+            onClick={checkAllHealth}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-glass text-text-secondary text-xs hover:bg-glass/80 transition-colors border border-glass-border"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Refresh All
+          </button>
         }
       />
 
-      {/* Category tabs */}
-      <div className="flex items-center gap-2 px-5 py-2.5">
-        <div className="tab-pills">
-          {(Object.entries(CATEGORY_LABELS) as [CategoryFilter, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setFilter(key)}
-              className={`tab-pill ${filter === key ? 'active' : ''}`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="flex-1 flex overflow-hidden">
-        {/* Connector grid */}
+        {/* Tool Cards Grid */}
         <div className="flex-1 overflow-y-auto p-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <AnimatePresence>
-              {filtered.map((connector, idx) => {
-                const statusUi = STATUS_UI[connector.status];
-                return (
-                  <motion.div key={connector.id} layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: idx * 0.05 }}>
-                    <GlassPanel
-                      hover
-                      onClick={() => setSelected(connector)}
-                      className={`p-4 cursor-pointer ${selected?.id === connector.id ? '!border-white/20' : ''}`}
-                    >
-                  <div className="flex items-start gap-3">
-                        <NeonIcon icon={Zap} color={connector.color} size="md" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold">{connector.name}</span>
-                            <span
-                              className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono"
-                              style={{ background: `${statusUi.color}15`, color: statusUi.color }}
-                            >
-                              {connector.status === 'connected' && <CheckCircle2 className="w-2.5 h-2.5" />}
-                              {connector.status === 'error' && <XCircle className="w-2.5 h-2.5" />}
-                              {connector.status === 'pending' && <RefreshCw className="w-2.5 h-2.5 animate-spin" />}
-                              {statusUi.label}
-                            </span>
-                          </div>
-                          <div className="text-xs text-text-muted mt-0.5 line-clamp-2">{connector.description}</div>
-                          <div className="flex items-center gap-1.5 mt-2">
-                            <span className="px-1.5 py-0.5 rounded bg-glass text-[10px] font-mono text-text-muted capitalize">
-                              {connector.category}
-                            </span>
-                            <span className="text-[10px] text-text-muted font-mono">
-                              {connector.features.length} features
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </GlassPanel>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {TOOLS.map((tool, idx) => {
+              const status = statuses[tool.id] || 'stopped';
+              const statusColor = getStatusColor(status);
+              const Icon = tool.icon;
+
+              return (
+                <motion.div
+                  key={tool.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.08 }}
+                >
+                  <GlassPanel
+                    hover
+                    onClick={() => setSelectedTool(tool)}
+                    className={`p-5 cursor-pointer ${selectedTool?.id === tool.id ? '!border-white/20' : ''}`}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <NeonIcon icon={Icon} color={tool.color} size="md" />
+                      <span
+                        className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono"
+                        style={{ background: `${statusColor}15`, color: statusColor }}
+                      >
+                        {status === 'running' && <CheckCircle2 className="w-2.5 h-2.5" />}
+                        {status === 'stopped' && <XCircle className="w-2.5 h-2.5" />}
+                        {status === 'checking' && <RefreshCw className="w-2.5 h-2.5 animate-spin" />}
+                        {getStatusLabel(status)}
+                      </span>
+                    </div>
+
+                    <h3 className="text-sm font-semibold mb-1">{tool.name}</h3>
+                    <p className="text-xs text-text-muted line-clamp-2 mb-3">{tool.description}</p>
+
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="px-2 py-0.5 rounded bg-glass text-[10px] font-mono capitalize"
+                        style={{ color: CATEGORY_COLORS[tool.category] }}
+                      >
+                        {tool.category}
+                      </span>
+                      {tool.port && (
+                        <span className="text-[10px] text-text-muted font-mono">
+                          :{tool.port}
+                        </span>
+                      )}
+                    </div>
+                  </GlassPanel>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Config panel */}
+        {/* Detail Panel */}
         <AnimatePresence>
-          {selected && (
+          {selectedTool && (
             <motion.div
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: 340, opacity: 1 }}
@@ -166,89 +246,89 @@ export default function IntegrationsPage() {
               <div className="w-[340px] p-4 space-y-4 overflow-y-auto h-full">
                 {/* Header */}
                 <div className="text-center pt-2">
-                  <div className="text-3xl mb-2">{selected.icon}</div>
-                  <div className="text-lg font-semibold">{selected.name}</div>
-                  <div className="text-xs text-text-muted mt-1">{selected.description}</div>
+                  <NeonIcon icon={selectedTool.icon} color={selectedTool.color} size="lg" />
+                  <div className="text-lg font-semibold mt-3">{selectedTool.name}</div>
+                  <div className="text-xs text-text-muted mt-1">{selectedTool.description}</div>
                 </div>
 
                 {/* Status */}
                 {(() => {
-                  const sui = STATUS_UI[selected.status];
+                  const s = statuses[selectedTool.id] || 'stopped';
+                  const c = getStatusColor(s);
                   return (
-                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg" style={{ background: `${sui.color}10` }}>
-                      <div className="w-2 h-2 rounded-full" style={{ background: sui.color }} />
-                      <span className="text-xs font-mono" style={{ color: sui.color }}>{sui.label}</span>
+                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg" style={{ background: `${c}10` }}>
+                      <div className="w-2 h-2 rounded-full" style={{ background: c }} />
+                      <span className="text-xs font-mono" style={{ color: c }}>{getStatusLabel(s)}</span>
                     </div>
                   );
                 })()}
 
-                {/* Features */}
+                {/* Connection Details */}
                 <GlassPanel className="p-3">
                   <div className="text-[10px] text-text-muted uppercase font-mono mb-2 flex items-center gap-1">
-                    <Zap className="w-3 h-3" /> Features
+                    <Cpu className="w-3 h-3" /> Connection
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selected.features.map((f) => (
-                      <span key={f} className="px-2 py-1 rounded bg-glass text-[10px] font-mono text-text-secondary">
-                        {f}
-                      </span>
-                    ))}
+                  <div className="space-y-1.5 text-xs">
+                    {selectedTool.port && (
+                      <div className="flex justify-between">
+                        <span className="text-text-muted">URL</span>
+                        <span className="font-mono">{selectedTool.url}</span>
+                      </div>
+                    )}
+                    {selectedTool.port && (
+                      <div className="flex justify-between">
+                        <span className="text-text-muted">Port</span>
+                        <span className="font-mono">{selectedTool.port}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-text-muted">Category</span>
+                      <span className="capitalize">{selectedTool.category}</span>
+                    </div>
                   </div>
                 </GlassPanel>
 
-                {/* Configuration */}
+                {/* Launch Command */}
                 <GlassPanel className="p-3">
-                  <div className="text-[10px] text-text-muted uppercase font-mono mb-3 flex items-center gap-1">
-                    <Settings className="w-3 h-3" /> Configuration
+                  <div className="text-[10px] text-text-muted uppercase font-mono mb-2 flex items-center gap-1">
+                    <Terminal className="w-3 h-3" /> Launch Command
                   </div>
-                  <div className="space-y-2">
-                    <div>
-                      <label className="text-[10px] text-text-muted uppercase font-mono">Base URL</label>
-                      <input
-                        type="text"
-                        value={configUrl}
-                        onChange={(e) => setConfigUrl(e.target.value)}
-                        placeholder="http://localhost:5678"
-                        className="w-full mt-1 px-3 py-2 bg-glass rounded-lg text-xs text-white placeholder:text-text-muted outline-none border border-glass-border focus:border-agent-coder/50 transition-colors"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-[10px] text-text-muted uppercase font-mono">API Key</label>
-                      <input
-                        type="password"
-                        value={configKey}
-                        onChange={(e) => setConfigKey(e.target.value)}
-                        placeholder="Optional"
-                        className="w-full mt-1 px-3 py-2 bg-glass rounded-lg text-xs text-white placeholder:text-text-muted outline-none border border-glass-border focus:border-agent-coder/50 transition-colors"
-                      />
-                    </div>
-                  </div>
+                  <code className="block text-xs text-agent-coder bg-void p-2 rounded font-mono break-all">
+                    {selectedTool.launchCmd}
+                  </code>
                 </GlassPanel>
 
                 {/* Actions */}
                 <div className="space-y-2">
-                  <button
-                    onClick={() => testConnection(selected.id)}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-agent-coder/10 text-agent-coder text-xs font-medium hover:bg-agent-coder/20 transition-colors"
-                  >
-                    <Link2 className="w-3.5 h-3.5" />
-                    Test Connection
-                  </button>
-                  <button
-                    onClick={saveConfig}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-glass text-text-secondary text-xs hover:bg-glass/80 transition-colors"
-                  >
-                    <Settings className="w-3.5 h-3.5" />
-                    Save Configuration
-                  </button>
+                  {selectedTool.embedable && statuses[selectedTool.id] === 'running' && (
+                    <button
+                      onClick={() => setEmbedUrl(selectedTool.url)}
+                      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-white text-xs font-medium transition-colors"
+                      style={{ background: selectedTool.color }}
+                    >
+                      <Play className="w-3.5 h-3.5" />
+                      Open in NEXUS
+                    </button>
+                  )}
+
                   <a
-                    href={selected.docsUrl}
+                    href={selectedTool.url || selectedTool.docsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-glass text-text-secondary text-xs hover:text-white transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
-                    View Documentation
+                    Open in Browser
+                  </a>
+
+                  <a
+                    href={selectedTool.docsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-glass text-text-secondary text-xs hover:text-white transition-colors"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    Documentation
                   </a>
                 </div>
               </div>
@@ -256,6 +336,38 @@ export default function IntegrationsPage() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Embedded iframe overlay */}
+      <AnimatePresence>
+        {embedUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex flex-col"
+            style={{ background: 'var(--bg-void)' }}
+          >
+            <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: 'var(--border-color)' }}>
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <Globe className="w-4 h-4" style={{ color: 'var(--neon-primary)' }} />
+                {embedUrl}
+              </div>
+              <button
+                onClick={() => setEmbedUrl(null)}
+                className="p-1.5 rounded-lg hover:bg-[var(--bg-glass-hover)] transition-colors"
+              >
+                <X className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+              </button>
+            </div>
+            <iframe
+              src={embedUrl}
+              className="flex-1 w-full border-0"
+              title="Embedded Tool"
+              sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
     </PageTransition>
   );

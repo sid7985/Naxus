@@ -1,0 +1,5 @@
+pageindex
+fastapi
+uvicorn[standard]
+python-multipart
+pymupdf

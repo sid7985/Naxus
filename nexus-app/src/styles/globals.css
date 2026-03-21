@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
-/* ===== NEXUS Design System — Neo-Glass Spatial ===== */
+/* ===== NEXUS Design System — Premium Dark ===== */
 
 @theme {
   /* Backgrounds */
-  --color-void: #0A0A0F;
-  --color-void-light: #12121A;
-  --color-elevated: #141419;
-  --color-glass: rgba(255, 255, 255, 0.04);
-  --color-glass-hover: rgba(255, 255, 255, 0.08);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
-  --color-glass-border-bright: rgba(255, 255, 255, 0.18);
+  --color-void: #050505;
+  --color-void-light: #0A0A0D;
+  --color-elevated: #0D0D0F;
+  --color-card: #0F0F12;
+  --color-glass: rgba(255, 255, 255, 0.03);
+  --color-glass-hover: rgba(255, 255, 255, 0.06);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-border-bright: rgba(255, 255, 255, 0.14);
 
   /* Agent Accent Colors */
   --color-agent-manager: #7C3AED;
@@ -22,19 +23,19 @@
 
   /* Text */
   --color-text-primary: #FFFFFF;
-  --color-text-secondary: #A0A0B0;
-  --color-text-muted: #606070;
+  --color-text-secondary: #8E8E9A;
+  --color-text-muted: #4A4A56;
 
   /* Status */
-  --color-status-idle: #606070;
+  --color-status-idle: #4A4A56;
   --color-status-thinking: #F59E0B;
   --color-status-acting: #06B6D4;
   --color-status-done: #10B981;
   --color-status-error: #F43F5E;
 
   /* Typography */
-  --font-ui: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-ui: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
 
   /* Animation */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -52,11 +53,11 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Radius Scale */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  /* Radius Scale — Premium rounded */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
   --radius-2xl: 28px;
   --radius-full: 9999px;
 
@@ -76,10 +77,12 @@
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
   --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
 
   /* Shadows */
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-glass-elevated: 0 16px 48px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-glass: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-glass-elevated: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
   --shadow-neon: 0 0 30px -5px;
 }
 
@@ -99,6 +102,7 @@
     background-color: var(--color-void);
     color: var(--color-text-primary);
     font-family: var(--font-ui);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -109,8 +113,8 @@
   }
 
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
@@ -118,12 +122,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.06));
     border-radius: 10px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.12));
   }
 }
 
@@ -131,13 +135,36 @@
 
 @layer utilities {
 
-  /* --- Base Glass Panel --- */
+  /* --- Card Surface (primary content container) --- */
+  .card-surface {
+    background: var(--bg-card, #0F0F12);
+    border: 1px solid var(--border-color-subtle, rgba(255, 255, 255, 0.04));
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .card-surface-interactive {
+    background: var(--bg-card, #0F0F12);
+    border: 1px solid var(--border-color-subtle, rgba(255, 255, 255, 0.04));
+    border-radius: 20px;
+    padding: 20px;
+    transition: all 200ms var(--ease-smooth);
+    cursor: pointer;
+  }
+  .card-surface-interactive:hover {
+    background: var(--bg-elevated, #0D0D0F);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.06));
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* --- Glass Panel (subtle background with blur) --- */
   .glass-panel {
     background: var(--color-glass);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--color-glass-border);
-    border-radius: 16px;
+    border-radius: 18px;
     box-shadow: var(--shadow-glass);
   }
 
@@ -146,11 +173,10 @@
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--color-glass-border);
-    border-radius: 16px;
+    border-radius: 18px;
     box-shadow: var(--shadow-glass);
     transition: all 250ms var(--ease-smooth);
   }
-
   .glass-panel-hover:hover {
     background: var(--color-glass-hover);
     border-color: var(--color-glass-border-bright);
@@ -158,28 +184,48 @@
     transform: translateY(-1px);
   }
 
-  /* --- Elevated Panels (Floating above void) --- */
+  /* --- Elevated Panel --- */
   .glass-elevated {
     background: var(--color-elevated);
     backdrop-filter: blur(24px) saturate(200%);
     -webkit-backdrop-filter: blur(24px) saturate(200%);
     border: 1px solid var(--color-glass-border-bright);
-    border-radius: 20px;
+    border-radius: 22px;
     box-shadow: var(--shadow-glass-elevated);
   }
 
-  /* --- Spatial Sidebar (Detached floating pill) --- */
+  /* --- Gradient Icon Badges (like the reference screenshot) --- */
+  .gradient-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .gradient-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient, var(--gradient-purple));
+    opacity: 0.18;
+    border-radius: inherit;
+  }
+
+  /* --- Spatial Sidebar (Floating pill) --- */
   .spatial-sidebar {
     background: var(--color-elevated);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--color-glass-border);
-    border-radius: 20px;
+    border-radius: 22px;
     box-shadow: var(--shadow-glass-elevated);
     margin: 10px;
   }
 
-  /* --- Neon Icon Glow Container --- */
+  /* --- Neon Icon --- */
   .neon-icon {
     display: flex;
     align-items: center;
@@ -194,26 +240,16 @@
     inset: 0;
     border-radius: inherit;
     background: linear-gradient(135deg, var(--neon-color, #7C3AED) 0%, transparent 70%);
-    opacity: 0.15;
-  }
-  .neon-icon::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: inherit;
-    background: radial-gradient(circle at center, var(--neon-color, #7C3AED), transparent 70%);
-    opacity: 0.1;
-    filter: blur(8px);
-    z-index: -1;
+    opacity: 0.12;
   }
 
-  /* --- Glow Utilities --- */
+  /* --- Glow / Text Utilities --- */
   .agent-glow {
-    box-shadow: 0 0 25px -5px var(--glow-color, rgba(124, 58, 237, 0.3));
+    box-shadow: 0 0 20px -5px var(--glow-color, rgba(124, 58, 237, 0.25));
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #7C3AED, #06B6D4);
+    background: linear-gradient(135deg, #A855F7, #06B6D4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -223,19 +259,17 @@
     font-family: var(--font-mono);
   }
 
-  /* --- Atmospheric Nebula Background --- */
+  /* --- Nebula Background --- */
   .nebula-bg {
     position: relative;
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-      #0A0A0F;
+      radial-gradient(ellipse at 20% 50%, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+      var(--bg-void, #050505);
   }
 
   /* --- Animations --- */
-
-  /* Agent pulse (idle breathing) */
   @keyframes agent-pulse {
     0%, 100% { opacity: 0.6; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.05); }
@@ -244,37 +278,28 @@
     animation: agent-pulse 2s ease-in-out infinite;
   }
 
-  /* Thought pulse — agent border glow when thinking */
   @keyframes thought-pulse {
     0%, 100% {
       box-shadow: 0 0 0px 0px var(--thought-color, rgba(124, 58, 237, 0.0));
       border-color: var(--color-glass-border);
     }
     50% {
-      box-shadow: 0 0 20px 2px var(--thought-color, rgba(124, 58, 237, 0.4));
-      border-color: var(--thought-color, rgba(124, 58, 237, 0.5));
+      box-shadow: 0 0 16px 2px var(--thought-color, rgba(124, 58, 237, 0.3));
+      border-color: var(--thought-color, rgba(124, 58, 237, 0.4));
     }
   }
   .animate-thought-pulse {
     animation: thought-pulse 2.5s ease-in-out infinite;
   }
 
-  /* Page enter (used by PageTransition wrapper) */
   @keyframes page-enter {
-    from {
-      opacity: 0;
-      transform: scale(0.97) translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0px);
-    }
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0px); }
   }
   .animate-page-enter {
-    animation: page-enter 0.4s var(--ease-smooth) forwards;
+    animation: page-enter 0.35s var(--ease-smooth) forwards;
   }
 
-  /* Neon border shimmer */
   @keyframes neon-shimmer {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -299,70 +324,71 @@
     pointer-events: none;
   }
 
-  /* --- Glass Input (elevated input with neon focus) --- */
+  /* --- Glass Input --- */
   .glass-input {
     width: 100%;
     padding: 0.625rem 1rem;
-    background: var(--color-glass);
-    border: 1px solid var(--color-glass-border);
-    border-radius: 12px;
-    color: white;
+    background: var(--bg-glass, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+    border-radius: 14px;
+    color: var(--text-primary, #FFF);
     font-size: 0.8125rem;
     outline: none;
     transition: all 200ms var(--ease-smooth);
   }
   .glass-input::placeholder {
-    color: var(--color-text-muted);
+    color: var(--text-muted, #4A4A56);
   }
   .glass-input:focus {
-    border-color: rgba(124, 58, 237, 0.5);
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1), var(--shadow-glass);
+    border-color: rgba(124, 58, 237, 0.4);
+    box-shadow: 0 0 0 3px var(--focus-ring, rgba(124, 58, 237, 0.15));
   }
 
-  /* --- Tab Pill (glass pill tabs) --- */
+  /* --- Tab Pills (pill-shaped navigation) --- */
   .tab-pills {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px;
-    background: var(--color-glass);
+    gap: 2px;
+    padding: 3px;
+    background: var(--bg-secondary, #111114);
     border-radius: 14px;
-    border: 1px solid var(--color-glass-border);
+    border: 1px solid var(--border-color-subtle, rgba(255, 255, 255, 0.04));
   }
   .tab-pill {
-    padding: 6px 14px;
-    border-radius: 10px;
-    font-size: 0.6875rem;
+    padding: 7px 16px;
+    border-radius: 11px;
+    font-size: 0.75rem;
     font-weight: 500;
-    color: var(--color-text-muted);
+    color: var(--text-muted, #4A4A56);
     transition: all 200ms var(--ease-smooth);
     white-space: nowrap;
     cursor: pointer;
     border: none;
     background: transparent;
+    letter-spacing: 0.01em;
   }
   .tab-pill:hover {
-    color: var(--color-text-primary);
+    color: var(--text-secondary, #8E8E9A);
   }
   .tab-pill.active {
-    background: var(--color-elevated);
-    color: var(--color-text-primary);
-    box-shadow: var(--shadow-glass);
+    background: var(--bg-elevated, #0D0D0F);
+    color: var(--text-primary, #FFF);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
 
-  /* --- Spatial Detail Panel (floating right panel) --- */
+  /* --- Spatial Detail Panel --- */
   .spatial-detail-panel {
     background: var(--color-elevated);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--color-glass-border);
-    border-radius: 20px;
+    border-radius: 22px;
     box-shadow: var(--shadow-glass-elevated);
     margin: 10px;
     margin-left: 0;
     overflow: hidden;
   }
-  /* --- Responsive Safety Net --- */
+
   @media (max-width: 768px) {
     .spatial-sidebar {
       display: none;

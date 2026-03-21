@@ -1,19 +1,20 @@
 import { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 import { useSettingsStore } from './stores/settingsStore';
 import ErrorBoundary from './components/layout/ErrorBoundary';
 import CommandPalette from './components/ui/CommandPalette';
 import ToastContainer from './components/ui/ToastContainer';
 import AsyncTrayIndicator from './components/ui/AsyncTrayIndicator';
-import Breadcrumb from './components/ui/Breadcrumb';
-import NotificationCenter from './components/ui/NotificationCenter';
+import MenuBar from './components/layout/MenuBar';
+import ActivityBar from './components/layout/ActivityBar';
+import StatusBar from './components/layout/StatusBar';
+import Sidebar from './components/layout/Sidebar';
+import BottomPanel from './components/layout/BottomPanel';
 import './styles/themes.css';
 import './services/missionQueue'; // Initialize background tasks
 
 // Lazy-loaded pages (code splitting)
-const LauncherPage = lazy(() => import('./pages/LauncherPage'));
-const LaunchSelectionPage = lazy(() => import('./pages/LaunchSelectionPage'));
+const CloudEnginePage = lazy(() => import('./pages/CloudEnginePage'));
 const CommandCenterPage = lazy(() => import('./pages/CommandCenterPage'));
 const AgentProfilePage = lazy(() => import('./pages/AgentProfilePage'));
 const MissionBuilderPage = lazy(() => import('./pages/MissionBuilderPage'));
@@ -21,6 +22,7 @@ const CodeEditorPage = lazy(() => import('./pages/CodeEditorPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const ObservabilityPage = lazy(() => import('./pages/ObservabilityPage'));
 const MemoryPage = lazy(() => import('./pages/MemoryPage'));
+const DocumentIntelligencePage = lazy(() => import('./pages/DocumentIntelligencePage'));
 const MemoryGraphPage = lazy(() => import('./pages/MemoryGraphPage'));
 const QuickTodoPage = lazy(() => import('./pages/QuickTodoPage'));
 const ComputerModePage = lazy(() => import('./pages/ComputerModePage'));
@@ -53,23 +55,127 @@ function PageLoader() {
   );
 }
 
-function AppShell({ children }: { children: React.ReactNode }) {
+function FullscreenLayout({ children }: { children: React.ReactNode }) {
   const theme = useSettingsStore((s) => s.theme);
   const liquidGlassEnabled = useSettingsStore((s) => s.liquidGlassEnabled);
 
   return (
-    <div className={`h-full w-full ${liquidGlassEnabled ? 'bg-transparent' : 'bg-void nebula-bg'}`} data-theme={theme}>
+    <div className={`h-full w-full ${liquidGlassEnabled ? 'bg-transparent' : ''}`} data-theme={theme} style={{ background: 'var(--bg-void)' }}>
+      <CommandPalette />
+      <ToastContainer />
+      {children}
+    </div>
+  );
+}
+
+function MinimalLayout({ children }: { children: React.ReactNode }) {
+  const theme = useSettingsStore((s) => s.theme);
+  const liquidGlassEnabled = useSettingsStore((s) => s.liquidGlassEnabled);
+
+  return (
+    <div className={`h-full w-full flex flex-col ${liquidGlassEnabled ? 'bg-transparent' : ''}`} data-theme={theme} style={{ background: 'var(--bg-void)' }}>
       <CommandPalette />
       <ToastContainer />
       <AsyncTrayIndicator />
-      <div className="flex items-center justify-between border-b border-glass-border/20">
-        <Breadcrumb />
-        <div className="pr-3">
-          <NotificationCenter />
+      
+      {/* Menu Bar Only */}
+      <MenuBar />
+      
+      {/* Main Content Area */}
+      <div className="flex-1 min-h-0 overflow-auto">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function IdeLayout({ children }: { children: React.ReactNode }) {
+  const theme = useSettingsStore((s) => s.theme);
+  const liquidGlassEnabled = useSettingsStore((s) => s.liquidGlassEnabled);
+
+  return (
+    <div className={`h-full w-full flex flex-col ${liquidGlassEnabled ? 'bg-transparent' : ''}`} data-theme={theme} style={{ background: 'var(--bg-void)' }}>
+      <CommandPalette />
+      <ToastContainer />
+      <AsyncTrayIndicator />
+
+      {/* Menu Bar */}
+      <MenuBar />
+
+      {/* Main Body: ActivityBar + Sidebar + Content + BottomPanel */}
+      <div className="flex flex-1 min-h-0">
+        <ActivityBar />
+        <Sidebar />
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 min-h-0 overflow-auto">
+            {children}
+          </div>
+          <BottomPanel />
         </div>
       </div>
-      {children}
+
+      {/* Status Bar */}
+      <StatusBar />
     </div>
+  );
+}
+
+// Higher Order Component to decide layout based on route
+function LayoutDecider({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+
+  // Fullscreen Routes
+  if (['/'].includes(location.pathname)) {
+    return <FullscreenLayout>{children}</FullscreenLayout>;
+  }
+
+  // IDE Routes (Theia inspired)
+  const ideRoutes = ['/editor', '/search', '/git', '/plugins', '/tester', '/observability'];
+  if (ideRoutes.some(route => location.pathname.startsWith(route))) {
+    return <IdeLayout>{children}</IdeLayout>;
+  }
+
+  // Minimal Routes (Default for all others)
+  return <MinimalLayout>{children}</MinimalLayout>;
+}
+
+function AnimatedRoutes() {
+  const isSetupComplete = useSettingsStore((state) => state.workspace.isSetupComplete);
+  const location = useLocation();
+
+  return (
+    <Routes location={location} key={location.pathname}>
+      <Route path="/" element={<RPGWorldPage />} />
+      <Route path="/rpg" element={<Navigate to="/" replace />} />
+
+      <Route path="/cloud" element={isSetupComplete ? <CloudEnginePage /> : <Navigate to="/" replace />} />
+      <Route path="/command" element={isSetupComplete ? <CommandCenterPage /> : <Navigate to="/" replace />} />
+      <Route path="/agent/:agentId" element={isSetupComplete ? <AgentProfilePage /> : <Navigate to="/" replace />} />
+      <Route path="/mission/new" element={isSetupComplete ? <MissionBuilderPage /> : <Navigate to="/" replace />} />
+      <Route path="/editor" element={isSetupComplete ? <CodeEditorPage /> : <Navigate to="/" replace />} />
+      <Route path="/settings" element={isSetupComplete ? <SettingsPage /> : <Navigate to="/" replace />} />
+      <Route path="/observability" element={isSetupComplete ? <ObservabilityPage /> : <Navigate to="/" replace />} />
+      <Route path="/memory" element={isSetupComplete ? <MemoryPage /> : <Navigate to="/" replace />} />
+      <Route path="/document-intelligence" element={isSetupComplete ? <DocumentIntelligencePage /> : <Navigate to="/" replace />} />
+      <Route path="/memory-graph" element={isSetupComplete ? <MemoryGraphPage /> : <Navigate to="/" replace />} />
+      <Route path="/todo" element={isSetupComplete ? <QuickTodoPage /> : <Navigate to="/" replace />} />
+      <Route path="/computer" element={isSetupComplete ? <ComputerModePage /> : <Navigate to="/" replace />} />
+      <Route path="/agent/create" element={isSetupComplete ? <AgentCreatorPage /> : <Navigate to="/" replace />} />
+      <Route path="/projects" element={isSetupComplete ? <ProjectManagerPage /> : <Navigate to="/" replace />} />
+      <Route path="/vision" element={isSetupComplete ? <ScreenVisionPage /> : <Navigate to="/" replace />} />
+      <Route path="/tester" element={isSetupComplete ? <TesterConsolePage /> : <Navigate to="/" replace />} />
+      <Route path="/zeroclaw" element={isSetupComplete ? <ZeroClawPage /> : <Navigate to="/" replace />} />
+      <Route path="/plugins" element={isSetupComplete ? <PluginManagerPage /> : <Navigate to="/" replace />} />
+      <Route path="/voice" element={isSetupComplete ? <VoiceControlPage /> : <Navigate to="/" replace />} />
+      <Route path="/internet" element={isSetupComplete ? <InternetControlPage /> : <Navigate to="/" replace />} />
+      <Route path="/workflows" element={isSetupComplete ? <WorkflowPage /> : <Navigate to="/" replace />} />
+      <Route path="/integrations" element={isSetupComplete ? <IntegrationsPage /> : <Navigate to="/" replace />} />
+      <Route path="/search" element={isSetupComplete ? <GlobalSearchPage /> : <Navigate to="/" replace />} />
+      <Route path="/git" element={isSetupComplete ? <GitPanelPage /> : <Navigate to="/" replace />} />
+      <Route path="/shortcuts" element={isSetupComplete ? <KeyboardShortcutsPage /> : <Navigate to="/" replace />} />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
@@ -85,8 +191,7 @@ function GlobalRPGListener() {
 
       if (e.metaKey && e.key === 'g') {
         e.preventDefault();
-        if (location.pathname === '/rpg') navigate('/');
-        else navigate('/rpg');
+        navigate('/');
       }
       if (e.metaKey && e.key === ',') {
         e.preventDefault();
@@ -121,50 +226,16 @@ function GlobalRPGListener() {
 }
 
 export default function App() {
-  const isSetupComplete = useSettingsStore((state) => state.workspace.isSetupComplete);
-
   return (
     <BrowserRouter>
       <GlobalRPGListener />
-      <AppShell>
+      <LayoutDecider>
         <ErrorBoundary>
         <Suspense fallback={<PageLoader />}>
-        <AnimatePresence mode="wait">
-        <Routes>
-          <Route path="/launcher" element={<LauncherPage />} />
-
-          <Route path="/" element={isSetupComplete ? <LaunchSelectionPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/command" element={isSetupComplete ? <CommandCenterPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/agent/:agentId" element={isSetupComplete ? <AgentProfilePage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/mission/new" element={isSetupComplete ? <MissionBuilderPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/editor" element={isSetupComplete ? <CodeEditorPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/settings" element={isSetupComplete ? <SettingsPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/observability" element={isSetupComplete ? <ObservabilityPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/memory" element={isSetupComplete ? <MemoryPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/memory-graph" element={isSetupComplete ? <MemoryGraphPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/todo" element={isSetupComplete ? <QuickTodoPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/computer" element={isSetupComplete ? <ComputerModePage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/rpg" element={isSetupComplete ? <RPGWorldPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/agent/create" element={isSetupComplete ? <AgentCreatorPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/projects" element={isSetupComplete ? <ProjectManagerPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/vision" element={isSetupComplete ? <ScreenVisionPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/tester" element={isSetupComplete ? <TesterConsolePage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/zeroclaw" element={isSetupComplete ? <ZeroClawPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/plugins" element={isSetupComplete ? <PluginManagerPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/voice" element={isSetupComplete ? <VoiceControlPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/internet" element={isSetupComplete ? <InternetControlPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/workflows" element={isSetupComplete ? <WorkflowPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/integrations" element={isSetupComplete ? <IntegrationsPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/search" element={isSetupComplete ? <GlobalSearchPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/git" element={isSetupComplete ? <GitPanelPage /> : <Navigate to="/launcher" replace />} />
-          <Route path="/shortcuts" element={isSetupComplete ? <KeyboardShortcutsPage /> : <Navigate to="/launcher" replace />} />
-
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        </AnimatePresence>
+          <AnimatedRoutes />
         </Suspense>
         </ErrorBoundary>
-      </AppShell>
+      </LayoutDecider>
     </BrowserRouter>
   );
 }

@@ -1,23 +1,27 @@
 /* ============================================
-   NEXUS Theme System — Neo-Glass Spatial
+   NEXUS Theme System — Premium Dark
+   Inspired by ultra-premium fintech/dashboard UIs
    4 themes: Dark (default), OLED, Light, High Contrast
    ============================================ */
 
-/* === Theme: Dark (Default — Deep Void) === */
+/* === Theme: Dark (Default — Ultra Premium) === */
 [data-theme="dark"], :root {
-  --bg-void: #0A0A0F;
-  --bg-elevated: #141419;
-  --bg-secondary: #1A1A22;
-  --bg-tertiary: #22222C;
-  --bg-glass: rgba(255, 255, 255, 0.04);
-  --bg-glass-hover: rgba(255, 255, 255, 0.07);
-  --bg-glass-border: rgba(255, 255, 255, 0.1);
-  --border-color: rgba(255, 255, 255, 0.08);
+  --bg-void: #050505;
+  --bg-elevated: #0D0D0F;
+  --bg-secondary: #111114;
+  --bg-tertiary: #18181C;
+  --bg-card: #0F0F12;
+  --bg-glass: rgba(255, 255, 255, 0.03);
+  --bg-glass-hover: rgba(255, 255, 255, 0.06);
+  --bg-glass-border: rgba(255, 255, 255, 0.08);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-color-subtle: rgba(255, 255, 255, 0.04);
   --glass-blur: blur(20px);
 
   --text-primary: #FFFFFF;
-  --text-secondary: #A0A0B0;
-  --text-muted: #606070;
+  --text-secondary: #8E8E9A;
+  --text-muted: #4A4A56;
+  --text-dim: #2E2E38;
 
   --agent-manager: #7C3AED;
   --agent-coder: #06B6D4;
@@ -26,66 +30,122 @@
   --agent-tester: #F43F5E;
   --agent-researcher: #6366F1;
 
-  --status-idle: #606070;
+  --status-idle: #4A4A56;
   --status-thinking: #F59E0B;
   --status-acting: #06B6D4;
   --status-done: #10B981;
   --status-error: #F43F5E;
 
-  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
   --neon-primary: #7C3AED;
   --neon-secondary: #06B6D4;
+
+  /* Gradient accent colors (for colorful icon badges) */
+  --gradient-purple: linear-gradient(135deg, #A855F7, #6366F1);
+  --gradient-cyan: linear-gradient(135deg, #22D3EE, #06B6D4);
+  --gradient-amber: linear-gradient(135deg, #FCD34D, #F59E0B);
+  --gradient-emerald: linear-gradient(135deg, #34D399, #10B981);
+  --gradient-rose: linear-gradient(135deg, #FB7185, #F43F5E);
+  --gradient-mixed: linear-gradient(135deg, #A855F7, #22D3EE, #F59E0B);
+
+  /* Layout surfaces */
+  --bg-menubar: #0A0A0C;
+  --bg-activitybar: #080808;
+  --bg-statusbar: #0A0A0C;
+  --bg-sidebar: #0B0B0E;
+  --statusbar-fg: #6E6E7A;
+  --statusbar-fg-active: #A0A0AC;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.06);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.12);
+
+  /* Interactive */
+  --focus-ring: rgba(124, 58, 237, 0.4);
+  --hover-overlay: rgba(255, 255, 255, 0.04);
 }
 
 /* === Theme: OLED Black === */
 [data-theme="oled"] {
   --bg-void: #000000;
-  --bg-elevated: #0A0A0A;
-  --bg-secondary: #111111;
+  --bg-elevated: #060606;
+  --bg-secondary: #0A0A0A;
+  --bg-tertiary: #0F0F0F;
+  --bg-card: #080808;
   --bg-glass: rgba(255, 255, 255, 0.02);
-  --bg-glass-hover: rgba(255, 255, 255, 0.05);
-  --bg-glass-border: rgba(255, 255, 255, 0.06);
-  --border-color: rgba(255, 255, 255, 0.05);
+  --bg-glass-hover: rgba(255, 255, 255, 0.04);
+  --bg-glass-border: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.04);
+  --border-color-subtle: rgba(255, 255, 255, 0.02);
 
   --text-primary: #EAEAEF;
-  --text-secondary: #909098;
-  --text-muted: #505058;
+  --text-secondary: #7A7A86;
+  --text-muted: #3E3E48;
 
-  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.8);
-  --neon-primary: #A855F7;
-  --neon-secondary: #22D3EE;
+  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.9);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.7);
+
+  --bg-menubar: #000000;
+  --bg-activitybar: #000000;
+  --bg-statusbar: #000000;
+  --bg-sidebar: #040404;
 }
 
-/* === Theme: Light (VS Code Clone) === */
+/* === Theme: Light (Clean White) === */
 [data-theme="light"] {
-  --bg-void: #ffffff;
-  --bg-elevated: #f8f8f8;
-  --bg-secondary: #f3f3f3;
-  --bg-glass: rgba(0, 0, 0, 0.03);
-  --bg-glass-hover: rgba(0, 0, 0, 0.06);
+  --bg-void: #F5F5F7;
+  --bg-elevated: #FFFFFF;
+  --bg-secondary: #F0F0F2;
+  --bg-tertiary: #E8E8EB;
+  --bg-card: #FFFFFF;
+  --bg-glass: rgba(0, 0, 0, 0.02);
+  --bg-glass-hover: rgba(0, 0, 0, 0.04);
   --bg-glass-border: rgba(0, 0, 0, 0.08);
-  --border-color: #e5e5e5;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-color-subtle: rgba(0, 0, 0, 0.05);
+  --glass-blur: blur(12px);
 
-  --text-primary: #333333;
-  --text-secondary: #616161;
-  --text-muted: #858585;
+  --text-primary: #1A1A1E;
+  --text-secondary: #6B6B78;
+  --text-muted: #9E9EAA;
+  --text-dim: #C0C0CC;
 
-  --agent-manager: #6D28D9;
+  --agent-manager: #7C3AED;
   --agent-coder: #0891B2;
   --agent-designer: #D97706;
   --agent-marketer: #059669;
   --agent-tester: #E11D48;
   --agent-researcher: #4F46E5;
 
-  --status-idle: #9090A0;
+  --status-idle: #9E9EAA;
   --status-thinking: #D97706;
   --status-acting: #0891B2;
   --status-done: #059669;
   --status-error: #E11D48;
 
-  --shadow-ambient: 0 4px 16px rgba(0, 0, 0, 0.08);
-  --neon-primary: #6D28D9;
+  --shadow-ambient: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --neon-primary: #7C3AED;
   --neon-secondary: #0891B2;
+
+  --gradient-purple: linear-gradient(135deg, #A855F7, #6366F1);
+  --gradient-cyan: linear-gradient(135deg, #22D3EE, #06B6D4);
+  --gradient-amber: linear-gradient(135deg, #FCD34D, #F59E0B);
+  --gradient-emerald: linear-gradient(135deg, #34D399, #10B981);
+  --gradient-rose: linear-gradient(135deg, #FB7185, #F43F5E);
+  --gradient-mixed: linear-gradient(135deg, #A855F7, #22D3EE, #F59E0B);
+
+  /* Layout surfaces */
+  --bg-menubar: #FFFFFF;
+  --bg-activitybar: #F0F0F2;
+  --bg-statusbar: #FFFFFF;
+  --bg-sidebar: #FAFAFA;
+  --statusbar-fg: #6B6B78;
+  --statusbar-fg-active: #1A1A1E;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.10);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.18);
+
+  --focus-ring: rgba(124, 58, 237, 0.25);
+  --hover-overlay: rgba(0, 0, 0, 0.03);
 }
 
 /* === Theme: High Contrast === */
@@ -93,29 +153,25 @@
   --bg-void: #000000;
   --bg-elevated: #0D0D0D;
   --bg-secondary: #1A1A1A;
+  --bg-tertiary: #222222;
+  --bg-card: #0D0D0D;
   --bg-glass: rgba(255, 255, 255, 0.08);
   --bg-glass-hover: rgba(255, 255, 255, 0.12);
   --bg-glass-border: rgba(255, 255, 255, 0.25);
   --border-color: rgba(255, 255, 255, 0.2);
+  --border-color-subtle: rgba(255, 255, 255, 0.12);
 
   --text-primary: #FFFFFF;
   --text-secondary: #D0D0DD;
   --text-muted: #A0A0B0;
 
-  --agent-manager: #A855F7;
-  --agent-coder: #22D3EE;
-  --agent-designer: #FCD34D;
-  --agent-marketer: #34D399;
-  --agent-tester: #FB7185;
-  --agent-researcher: #818CF8;
-
-  --status-idle: #A0A0B0;
-  --status-thinking: #FCD34D;
-  --status-acting: #22D3EE;
-  --status-done: #34D399;
-  --status-error: #FB7185;
-
   --shadow-ambient: 0 4px 16px rgba(0, 0, 0, 0.6);
-  --neon-primary: #A855F7;
-  --neon-secondary: #22D3EE;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.5);
+
+  --bg-menubar: #000000;
+  --bg-activitybar: #000000;
+  --bg-statusbar: #000000;
+  --bg-sidebar: #0D0D0D;
+  --statusbar-fg: #D0D0DD;
+  --statusbar-fg-active: #FFFFFF;
 }
